@@ -10,28 +10,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 05.02.2023.
  */
 @ControllerAdvice
 public class CustomErrorController {
 
     @ExceptionHandler
-    ResponseEntity handleJPAViolations(TransactionSystemException exception){
+    ResponseEntity<List<Map<String,String>>> handleJPAViolations(TransactionSystemException exception){
         ResponseEntity.BodyBuilder responseEntity = ResponseEntity.badRequest();
 
-        if (exception.getCause().getCause() instanceof ConstraintViolationException){
-            ConstraintViolationException ve = (ConstraintViolationException) exception.getCause().getCause();
+        if (exception.getCause().getCause() instanceof ConstraintViolationException ve){
 
-            List errors = ve.getConstraintViolations().stream()
+            List<Map<String,String>> errors = ve.getConstraintViolations().stream()
                     .map(constraintViolation -> {
                         Map<String, String> errMap = new HashMap<>();
                         errMap.put(constraintViolation.getPropertyPath().toString(),
                                 constraintViolation.getMessage());
                         return errMap;
-                    }).collect(Collectors.toList());
+                    }).toList();
             return responseEntity.body(errors);
         }
 
@@ -39,14 +37,14 @@ public class CustomErrorController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity handleBindErrors(MethodArgumentNotValidException exception){
+    ResponseEntity<List<Map<String,String>>> handleBindErrors(MethodArgumentNotValidException exception){
 
-        List errorList = exception.getFieldErrors().stream()
+        List<Map<String,String>> errorList = exception.getFieldErrors().stream()
                 .map(fieldError -> {
                     Map<String, String > errorMap = new HashMap<>();
                     errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
                     return errorMap;
-                }).collect(Collectors.toList());
+                }).toList();
 
         return ResponseEntity.badRequest().body(errorList);
     }

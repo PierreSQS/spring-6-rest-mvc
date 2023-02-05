@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 05.02.2023.
  */
 @Getter
 @Setter
@@ -27,7 +27,6 @@ public class Customer {
     private UUID id;
     private String name;
 
-    @Column(length = 255)
     private String email;
 
     @Version
