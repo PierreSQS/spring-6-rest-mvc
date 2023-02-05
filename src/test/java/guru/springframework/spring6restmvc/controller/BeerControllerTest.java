@@ -20,7 +20,7 @@ class BeerControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    BeerService beerService;
+    BeerService beerServMock;
 
     @Test
     void getBeerById() throws Exception {
