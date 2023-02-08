@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 08.02.2023.
  */
 @Service
 @Primary
@@ -47,7 +46,7 @@ public class BeerServiceJPA implements BeerService {
 
         return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle) {
@@ -85,9 +84,8 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () ->
+                atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
@@ -123,9 +121,8 @@ public class BeerServiceJPA implements BeerService {
             }
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () ->
+                atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
