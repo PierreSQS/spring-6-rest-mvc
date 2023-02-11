@@ -19,6 +19,7 @@ import java.util.UUID;
  */
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
 
@@ -27,7 +28,7 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @PatchMapping(BEER_PATH_ID)
+    @PatchMapping("{beerId}")
     public ResponseEntity<Void> updateBeerPatchById(@PathVariable("beerId")UUID beerId, @RequestBody BeerDTO beer){
 
         beerService.patchBeerById(beerId, beer);
@@ -35,7 +36,7 @@ public class BeerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(BEER_PATH_ID)
+    @DeleteMapping("{beerId}")
     public ResponseEntity<Void> deleteById(@PathVariable("beerId") UUID beerId){
 
         if(Boolean.FALSE.equals( beerService.deleteById(beerId))){
@@ -45,7 +46,7 @@ public class BeerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(BEER_PATH_ID)
+    @PutMapping("{beerId}")
     public ResponseEntity<Void> updateById(@PathVariable("beerId")UUID beerId, @Validated @RequestBody BeerDTO beer){
 
         if( beerService.updateBeerById(beerId, beer).isEmpty()){
@@ -55,7 +56,7 @@ public class BeerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(BEER_PATH)
+    @PostMapping
     public ResponseEntity<HttpHeaders> handlePost(@Validated @RequestBody BeerDTO beer){
 
         BeerDTO savedBeer = beerService.saveNewBeer(beer);
@@ -66,7 +67,7 @@ public class BeerController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = BEER_PATH)
+    @GetMapping
     public Page<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
                                    @RequestParam(required = false) BeerStyle beerStyle,
                                    @RequestParam(required = false) Boolean showInventory,
@@ -76,7 +77,7 @@ public class BeerController {
     }
 
 
-    @GetMapping(value = BEER_PATH_ID)
+    @GetMapping("{beerId}")
     public BeerDTO getBeerById(@PathVariable("beerId") UUID beerId){
 
         log.debug("Get Beer by Id - in controller");
