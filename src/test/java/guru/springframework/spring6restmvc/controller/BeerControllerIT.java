@@ -141,6 +141,13 @@ class BeerControllerIT {
     }
 
     @Test
+    // this test fulfills the minimal requirement, to test the No Authentication!!!
+    void testNoAuth() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void tesListBeersByStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .with(user(USERNAME).password(PASSWORD))
