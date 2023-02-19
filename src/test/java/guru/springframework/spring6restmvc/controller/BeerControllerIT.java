@@ -15,6 +15,13 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * this Test is an Integration Test just to check
+ * the interaction between controller and service
+ * in isolation without the Web-Layer
+ * <p>
+ * Modified by Pierrot, 19.02.2023.
+ */
 @SpringBootTest
 class BeerControllerIT {
     @Autowired
