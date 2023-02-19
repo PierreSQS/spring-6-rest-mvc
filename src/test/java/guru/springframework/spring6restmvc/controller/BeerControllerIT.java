@@ -3,13 +3,19 @@ package guru.springframework.spring6restmvc.controller;
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * <p>
  * Modified by Pierrot, 19.02.2023.
  */
+@Slf4j
 @SpringBootTest
 class BeerControllerIT {
     @Autowired
@@ -29,6 +36,29 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @Rollback
+    @Transactional
+    @Test
+    void saveNewBeerTest() {
+        BeerDTO beerDTO = BeerDTO.builder()
+                .beerName("New Beer")
+                .build();
+
+        ResponseEntity<HttpHeaders> respEntity = beerController.handlePost(beerDTO);
+
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        String locationPath = Objects.requireNonNull(respEntity.getHeaders().getLocation()).getPath();
+        assertThat(locationPath).isNotNull();
+
+        String[] pathFragments = locationPath.split("/");
+
+        Optional<Beer> byId = beerRepository.findById(UUID.fromString(pathFragments[4]));
+
+        byId.ifPresent(beer -> {
+            log.info("Beer saved with ID {}",beer.getId());
+            assertThat(beer.getBeerName()).isEqualTo("New Beer");});
+    }
 
     @Test
     void testBeerIdNotFound() {
