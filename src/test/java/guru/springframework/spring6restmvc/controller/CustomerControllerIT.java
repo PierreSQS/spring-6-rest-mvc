@@ -31,21 +31,24 @@ class CustomerControllerIT {
         customerRepository.deleteAll();
         List<CustomerDTO> dtos = customerController.listAllCustomers();
 
-        assertThat(dtos.size()).isEqualTo(0);
+        assertThat(dtos).isEmpty();
     }
 
     @Test
     void testListAll() {
         List<CustomerDTO> dtos = customerController.listAllCustomers();
 
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos).hasSize(3);
     }
 
     @Test
     void testGetByIdNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            customerController.getCustomerById(UUID.randomUUID());
-        });
+        UUID uuid = UUID.randomUUID();
+
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> customerController.getCustomerById(uuid));
+
+        assertThat(notFoundException.getMessage()).isEqualTo("Customer not found!!");
     }
 
     @Test

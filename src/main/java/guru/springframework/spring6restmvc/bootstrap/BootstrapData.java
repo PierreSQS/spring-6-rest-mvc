@@ -6,25 +6,27 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 19.02.2023.
  */
-@Component
+@Slf4j
 @RequiredArgsConstructor
+@Component
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         loadBeerData();
         loadCustomerData();
     }
@@ -64,6 +66,8 @@ public class BootstrapData implements CommandLineRunner {
             beerRepository.save(beer1);
             beerRepository.save(beer2);
             beerRepository.save(beer3);
+
+            log.info("loaded {} beers !!",beerRepository.count());
         }
 
     }
@@ -95,7 +99,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            customerRepository.saveAll(List.of(customer1, customer2, customer3));
+
+            log.info("loaded {} customers !!",customerRepository.count());
+
         }
 
     }

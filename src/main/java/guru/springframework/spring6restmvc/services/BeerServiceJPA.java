@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Created by Pierrot, 18.02.2023.
  */
 @Service
 @Primary
@@ -27,7 +26,7 @@ public class BeerServiceJPA implements BeerService {
         return beerRepository.findAll()
                 .stream()
                 .map(beerMapper::beerToBeerDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

@@ -25,9 +25,12 @@ class BeerControllerIT {
 
     @Test
     void testBeerIdNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            beerController.getBeerById(UUID.randomUUID());
-        });
+        UUID beerId = UUID.randomUUID();
+
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> beerController.getBeerById(beerId));
+
+        assertThat(notFoundException.getMessage()).isEqualTo("Beer not found!!");
     }
 
     @Test
@@ -36,14 +39,14 @@ class BeerControllerIT {
 
         BeerDTO dto = beerController.getBeerById(beer.getId());
 
-        assertThat(dto).isNotNull();
+        assertThat(dto.getBeerName()).isEqualTo(beer.getBeerName());
     }
 
     @Test
     void testListBeers() {
         List<BeerDTO> dtos = beerController.listBeers();
 
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos).hasSize(3);
     }
 
     @Rollback
@@ -53,7 +56,7 @@ class BeerControllerIT {
         beerRepository.deleteAll();
         List<BeerDTO> dtos = beerController.listBeers();
 
-        assertThat(dtos.size()).isEqualTo(0);
+        assertThat(dtos).isEmpty();
     }
 }
 
