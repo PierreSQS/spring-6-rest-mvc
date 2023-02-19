@@ -40,6 +40,38 @@ class BeerControllerIT {
     @Rollback
     @Transactional
     @Test
+    void updateExistingBeer() {
+        final String beerNewName = "Updated Name";
+        // The Beer to update
+        Beer beerToUpdate = beerRepository.findAll().get(0);
+
+        log.info("The Beer to update: {}",beerToUpdate.getBeerName());
+
+        // The Beer Update
+        BeerDTO beerDTOChanges = BeerDTO.builder().build();
+        beerDTOChanges.setId(null);
+        beerDTOChanges.setVersion(null);
+        beerDTOChanges.setBeerName(beerNewName);
+
+        // Update the Beer
+        ResponseEntity<Void> respEntity = beerController.updateById(beerToUpdate.getId(), beerDTOChanges);
+
+        // Assertions on ResponseEntity
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        // Find the updated Beer in the DB to assert
+        Optional<Beer> updatedBeerOpt = beerRepository.findById(beerToUpdate.getId());
+
+        // Assertions on updated Beer
+        updatedBeerOpt.ifPresent(beer -> {
+            log.info("The New BeerName: {}",beer.getBeerName());
+            assertThat(beer.getBeerName()).isEqualTo(beerDTOChanges.getBeerName());
+        });
+    }
+
+    @Rollback
+    @Transactional
+    @Test
     void saveNewBeerTest() {
         BeerDTO beerDTO = BeerDTO.builder()
                 .beerName("New Beer")
