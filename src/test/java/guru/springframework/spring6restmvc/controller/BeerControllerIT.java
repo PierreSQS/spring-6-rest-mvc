@@ -7,16 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,6 +34,34 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @Test
+    void testDeleteByIDNotFound() {
+
+        UUID beerId = UUID.randomUUID();
+
+        EmptyResultDataAccessException nSE = assertThrows(EmptyResultDataAccessException.class,
+                () -> beerController.deleteById(beerId));
+
+        assertThat(nSE.getMessage()).contains(String.format("entity with id %s exists", beerId));
+
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void deleteByIdFound() {
+        Beer beerToDelete = beerRepository.findAll().get(0);
+
+        beerController.deleteById(beerToDelete.getId());
+
+        Optional<Beer> deletedById = beerRepository.findById(beerToDelete.getId());
+        NoSuchElementException nSE = assertThrows(NoSuchElementException.class,
+                deletedById::get);
+
+        assertThat(nSE.getMessage()).isEqualTo("No value present");
+
+    }
 
     @Test
     void updateBeerNotFound() {
