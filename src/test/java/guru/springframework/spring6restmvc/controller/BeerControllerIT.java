@@ -56,10 +56,8 @@ class BeerControllerIT {
         beerController.deleteById(beerToDelete.getId());
 
         Optional<Beer> deletedById = beerRepository.findById(beerToDelete.getId());
-        NoSuchElementException nSE = assertThrows(NoSuchElementException.class,
-                deletedById::get);
 
-        assertThat(nSE.getMessage()).isEqualTo("No value present");
+        assertThat(deletedById).isEmpty();
 
     }
 
