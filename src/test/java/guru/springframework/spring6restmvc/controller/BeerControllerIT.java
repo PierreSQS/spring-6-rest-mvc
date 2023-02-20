@@ -37,6 +37,18 @@ class BeerControllerIT {
     @Autowired
     BeerRepository beerRepository;
 
+    @Test
+    void updateBeerNotFound() {
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        UUID beerId = UUID.randomUUID();
+
+        NotFoundException nFE = assertThrows(NotFoundException.class,
+                () -> beerController.updateById(beerId, beerDTO));
+
+        assertThat(nFE.getMessage()).isEqualTo("Beer not found!!");
+
+    }
+
     @Rollback
     @Transactional
     @Test
