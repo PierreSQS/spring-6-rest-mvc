@@ -32,7 +32,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(get("/api/v1/customer"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(3))
+                .andExpect(jsonPath("$.length()").value(3))
                 .andDo(print());
     }
 }
