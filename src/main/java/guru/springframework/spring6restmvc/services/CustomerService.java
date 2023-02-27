@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 27.02.2023.
  */
 public interface CustomerService {
 
@@ -15,4 +15,6 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
 
     Customer saveNewCustomer(Customer customer);
+
+    void updateCustomerByID(UUID custID, Customer custToUpdate);
 }
