@@ -23,31 +23,30 @@ public class BeerController {
     private final BeerService beerService;
 
     @PutMapping("{beerId}")
-    public ResponseEntity updateById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
+    public ResponseEntity<Void> updateById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
 
         beerService.updateBeerById(beerId, beer);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping
-    //@RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity handlePost(@RequestBody Beer beer){
+    public ResponseEntity<HttpHeaders> handlePost(@RequestBody Beer beer){
 
         Beer savedBeer = beerService.saveNewBeer(beer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/beer/" + savedBeer.getId().toString());
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<Beer> listBeers(){
         return beerService.listBeers();
     }
 
-    @RequestMapping(value = "{beerId}", method = RequestMethod.GET)
+    @GetMapping("{beerId}")
     public Beer getBeerById(@PathVariable("beerId") UUID beerId){
 
         log.debug("Get Beer by Id - in controller");

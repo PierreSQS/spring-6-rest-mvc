@@ -22,21 +22,21 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity handlePost(@RequestBody Customer customer){
+    public ResponseEntity<HttpHeaders> handlePost(@RequestBody Customer customer){
         Customer savedCustomer = customerService.saveNewCustomer(customer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<Customer> listAllCustomers(){
         return customerService.getAllCustomers();
     }
 
-    @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
+    @GetMapping("{customerId}")
     public Customer getCustomerById(@PathVariable("customerId") UUID id){
         return customerService.getCustomerById(id);
     }
