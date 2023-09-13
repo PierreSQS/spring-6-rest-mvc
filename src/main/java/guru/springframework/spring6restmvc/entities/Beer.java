@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.entities;
 
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Entity
 public class Beer {
     @Id
+    @GeneratedValue
     private UUID id;
     private Integer version;
     private String beerName;
