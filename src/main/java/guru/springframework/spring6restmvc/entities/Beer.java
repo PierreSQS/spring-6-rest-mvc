@@ -4,6 +4,7 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,6 +21,8 @@ public class Beer {
     @Id
     @GeneratedValue
     private UUID id;
+
+    @Version
     private Integer version;
     private String beerName;
     private BeerStyle beerStyle;
