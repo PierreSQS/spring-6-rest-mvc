@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +11,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 @SpringBootTest
@@ -22,6 +25,20 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepo;
+
+    @Test
+    void testBeerIdNotFound() {
+        UUID beerId = UUID.randomUUID();
+        assertThatThrownBy(() -> beerController.getBeerById(beerId))
+                .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    void testGetById() {
+        Beer beer = beerRepo.findAll().get(0);
+        BeerDTO beerById = beerController.getBeerById(beer.getId());
+        assertThat(beerById.getBeerName()).isEqualTo("Galaxy Cat");
+    }
 
     @Test
     void testListBeers() {
