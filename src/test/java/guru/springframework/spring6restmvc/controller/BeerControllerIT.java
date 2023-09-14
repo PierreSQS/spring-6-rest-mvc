@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @SpringBootTest
@@ -29,8 +30,14 @@ class BeerControllerIT {
     @Test
     void testBeerIdNotFound() {
         UUID beerId = UUID.randomUUID();
+
+        // AssertJ Exception Assertion
         assertThatThrownBy(() -> beerController.getBeerById(beerId))
                 .isInstanceOf(NotFoundException.class);
+
+        // Junit Exception Assertion
+        assertThrows(NotFoundException.class, () ->
+                beerController.getBeerById(beerId));
     }
 
     @Test
