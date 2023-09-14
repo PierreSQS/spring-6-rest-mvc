@@ -1,8 +1,8 @@
 package guru.springframework.spring6restmvc.bootstrap;
 
 import guru.springframework.spring6restmvc.entities.Beer;
-import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.entities.Customer;
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Component 
