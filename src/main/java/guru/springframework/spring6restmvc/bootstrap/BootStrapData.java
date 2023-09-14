@@ -5,6 +5,7 @@ import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,17 +15,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component 
 public class BootStrapData implements CommandLineRunner {
     
     private final BeerRepository beerRepo;
     
     private final CustomerRepository customerRepo;
-
-    public BootStrapData(BeerRepository beerRepo, CustomerRepository customerRepo) {
-        this.beerRepo = beerRepo;
-        this.customerRepo = customerRepo;
-    }
 
 
     @Override
