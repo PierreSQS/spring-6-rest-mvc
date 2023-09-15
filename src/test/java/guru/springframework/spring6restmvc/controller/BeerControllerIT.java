@@ -17,6 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * JT Implementation
+ * Implemented by Pierrot 14.09.2023
+ */
 @Slf4j
 @SpringBootTest
 class BeerControllerIT {
