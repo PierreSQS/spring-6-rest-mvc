@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,12 +22,14 @@ public class CustomerServiceJPA implements CustomerService {
 
     @Override
     public Optional<CustomerDTO> getCustomerById(UUID uuid) {
-        return Optional.empty();
+        return customerRepo.findById(uuid).map(customerMapper::customerToCustomerDto);
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        return Collections.emptyList();
+        return customerRepo.findAll().stream()
+                .map(customerMapper::customerToCustomerDto)
+                .toList();
     }
 
     @Override

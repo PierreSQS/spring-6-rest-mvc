@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * JT Implementation
  * Implemented by Pierrot 15.09.2023
- *
+
  * This should be the proper IT in my sens!!!!!
  * At the moment the testEmptyList()-test doesn't work
  */
