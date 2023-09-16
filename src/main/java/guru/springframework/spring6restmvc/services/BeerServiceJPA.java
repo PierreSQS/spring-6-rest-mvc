@@ -42,6 +42,18 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public void updateBeerById(UUID beerId, BeerDTO beerDTO) {
+        Optional<Beer> byId = beerRepo.findById(beerId);
+        if (byId.isPresent()) {
+            Beer foundBeer = byId.get();
+            foundBeer.setBeerName(beerDTO.getBeerName());
+            foundBeer.setBeerStyle(beerDTO.getBeerStyle());
+            foundBeer.setUpc(beerDTO.getUpc());
+            foundBeer.setPrice(beerDTO.getPrice());
+            foundBeer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+            foundBeer.setCreatedDate(beerDTO.getCreatedDate());
+            foundBeer.setUpdateDate(beerDTO.getUpdateDate());
+            beerRepo.save(beerMapper.beerDtoToBeer(beerDTO));
+        }
 
     }
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +36,23 @@ class BeerControllerIT {
     @Autowired
     BeerRepository beerRepo;
 
+    @Transactional
+    @Rollback
+    @Test
+    void updateByIdExistingBeer() {
+
+        BeerDTO beerDTO = BeerDTO.builder().beerName("Updated BeerName").build();
+        List<Beer> beerList = beerRepo.findAll();
+
+        ResponseEntity<Void> respEntity = beerController.updateById(beerList.get(0).getId(),beerDTO);
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Optional<Beer> byId = beerRepo.findById(beerList.get(0).getId());
+
+        assertThat(byId.get().getBeerName()).isEqualTo(beerDTO.getBeerName());
+
+    }
+
 
     @Transactional
     @Rollback
@@ -54,6 +72,7 @@ class BeerControllerIT {
         Beer beer = beerRepo.findById(uuid).orElse(null);
 
         assertThat(beer.getBeerName()).isEqualTo(newBeerDTO.getBeerName());
+
     }
 
 
