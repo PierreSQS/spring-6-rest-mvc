@@ -7,10 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +34,28 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepo;
+
+
+    @Transactional
+    @Rollback
+    @Test
+    void saveNewBeer() {
+        BeerDTO newBeerDTO = BeerDTO.builder().beerName("New Beer").build();
+        ResponseEntity<HttpHeaders> respEntity =
+                beerController.saveNewBeer(newBeerDTO);
+
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(beerRepo.count()).isEqualTo(4);
+
+        String[] pathFragments = Objects.requireNonNull(respEntity.getHeaders().getLocation()).getPath().split("/");
+
+        UUID uuid = UUID.fromString(pathFragments[4]);
+
+        Beer beer = beerRepo.findById(uuid).orElse(null);
+
+        assertThat(beer.getBeerName()).isEqualTo(newBeerDTO.getBeerName());
+    }
+
 
     @Test
     void testBeerIdNotFound() {
@@ -66,4 +92,6 @@ class BeerControllerIT {
         List<BeerDTO> beerDTOList = beerController.listBeers();
         assertThat(beerDTOList).isEmpty();
     }
+
+
 }
