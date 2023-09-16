@@ -50,7 +50,7 @@ public class BeerController {
     }
 
     @PostMapping(BEER_PATH)
-    public ResponseEntity<HttpHeaders> handlePost(@RequestBody BeerDTO beerDTO){
+    public ResponseEntity<HttpHeaders> saveNewBeer(@RequestBody BeerDTO beerDTO){
 
         BeerDTO savedBeerDTO = beerService.saveNewBeer(beerDTO);
 
