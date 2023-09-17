@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.controller.NotFoundException;
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -53,6 +54,8 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setCreatedDate(beerDTO.getCreatedDate());
             foundBeer.setUpdateDate(beerDTO.getUpdateDate());
             beerRepo.save(beerMapper.beerDtoToBeer(beerDTO));
+        } else {
+            throw new NotFoundException("Value Not Found");
         }
 
     }

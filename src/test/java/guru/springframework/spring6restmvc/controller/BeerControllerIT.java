@@ -36,6 +36,23 @@ class BeerControllerIT {
     @Autowired
     BeerRepository beerRepo;
 
+    @Test
+    void updateByIdBeerNotFound() {
+        UUID beerId = UUID.randomUUID();
+        BeerDTO beerDTO = BeerDTO.builder().beerName("Updated BeerName").build();
+
+        // AssertJ Code
+        assertThatThrownBy(() -> beerController.updateById(beerId,beerDTO))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Value Not Found");
+
+        // Junit5 Code
+        assertThrows(NotFoundException.class,
+                () -> beerController.updateById(beerId,beerDTO));
+
+
+    }
+
     @Transactional
     @Rollback
     @Test
