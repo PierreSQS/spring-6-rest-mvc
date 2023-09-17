@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,38 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 @SpringBootTest
 class BeerControllerIT {
+    @Autowired
+    BeerMapper beerMapper;
 
     @Autowired
     BeerController beerController;
 
     @Autowired
     BeerRepository beerRepo;
+
+
+    @Test
+    void deleteBeerNotFound() {
+        UUID beerId = UUID.randomUUID();
+
+        ResponseEntity<Void> respEntity = beerController.deleteById(beerId);
+
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(beerRepo.count()).isEqualTo(3);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteExistingBeer() {
+        Beer beerToDelete = beerRepo.findAll().get(0);
+        beerController.deleteById(beerMapper.beerToBeerDto(beerToDelete).getId());
+
+        assertThat(beerRepo.findById(beerToDelete.getId())).isEmpty();
+
+        assertThat(beerRepo.count()).isEqualTo(2);
+
+    }
 
     @Test
     void updateByIdBeerNotFound() {
