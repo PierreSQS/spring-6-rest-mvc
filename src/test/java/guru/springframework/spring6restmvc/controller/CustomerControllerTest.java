@@ -134,7 +134,7 @@ class CustomerControllerTest {
     void getCustomerByIdNotFound() throws Exception {
         UUID customerID = UUID.randomUUID();
 
-        given(customerService.getCustomerById(any())).willThrow(NotFoundException.class);
+        given(customerService.getCustomerById(any())).willReturn(Optional.empty());
 
         ResultActions resultActions = mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, customerID))
                 .andExpect(status().isNotFound())

@@ -131,7 +131,7 @@ class BeerControllerTest {
     void getBeerByIdNotFound() throws Exception {
         UUID uuid = UUID.randomUUID();
 
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
 
         ResultActions resultActions = mockMvc.perform(get(BeerController.BEER_PATH_ID, uuid))
                 .andExpect(status().isNotFound())
