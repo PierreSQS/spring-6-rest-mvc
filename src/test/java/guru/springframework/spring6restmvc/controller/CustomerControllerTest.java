@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -133,9 +137,13 @@ class CustomerControllerTest {
 
         given(customerService.getCustomerById(any())).willThrow(NotFoundException.class);
 
-        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID,customerID))
+        ResultActions resultActions = mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, customerID))
                 .andExpect(status().isNotFound())
                 .andDo(print());
+
+        MockHttpServletResponse response = resultActions.andReturn().getResponse();
+
+        assertThat(response.getErrorMessage()).isEqualTo("Value Not Found");
     }
 
     @Test
