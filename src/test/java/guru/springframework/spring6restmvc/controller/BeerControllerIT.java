@@ -22,9 +22,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,6 +53,13 @@ class BeerControllerIT {
     void setUp() {
     }
 
+    @Test
+    void testListBeersByName() throws Exception {
+        mockMvc.perform((get(BeerController.BEER_PATH)).param("beerName","IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(equalTo(100)))
+                .andDo(print());
+    }
 
     @Test
     void testPatchBeerBadName() throws Exception {
