@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
@@ -25,10 +26,16 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public List<BeerDTO> listBeers(String beerName) {
-        return beerRepository.findAll()
-                .stream()
+        List<Beer> beerList;
+        if (StringUtils.hasText(beerName)) {
+            beerList = beerRepository.findBeerByBeerName(beerName);
+        } else {
+            beerList = beerRepository.findAll();
+        }
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
                 .toList();
+
     }
 
     @Override
