@@ -28,7 +28,7 @@ public class BeerServiceJPA implements BeerService {
     public List<BeerDTO> listBeers(String beerName) {
         List<Beer> beerList;
         if (StringUtils.hasText(beerName)) {
-            beerList = beerRepository.findBeerByBeerName(beerName);
+            beerList = beerRepository.findBeerByBeerNameIsLikeIgnoreCase(beerName);
         } else {
             beerList = beerRepository.findAll();
         }
