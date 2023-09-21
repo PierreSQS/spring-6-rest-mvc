@@ -73,7 +73,7 @@ class BeerControllerIT {
                         .param("showInventory","false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(equalTo(310)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(equalTo(nullValue())))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(nullValue()))
                 .andDo(print());
     }
 
