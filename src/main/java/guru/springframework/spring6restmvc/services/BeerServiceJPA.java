@@ -29,7 +29,7 @@ public class BeerServiceJPA implements BeerService {
     public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle) {
         List<Beer> beerList;
         if (StringUtils.hasText(beerName) && beerStyle == null) {
-            beerList = beerRepository.findBeerByBeerNameIsLikeIgnoreCase(beerName);
+            beerList = beerRepository.findBeerByBeerNameIsLikeIgnoreCase("%"+beerName+"%");
         } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
             beerList = beerRepository.findBeerByBeerStyle(beerStyle);
         } else {
