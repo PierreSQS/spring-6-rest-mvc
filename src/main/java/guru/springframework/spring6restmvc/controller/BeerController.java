@@ -70,7 +70,7 @@ public class BeerController {
     public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
                                    @RequestParam(required = false) BeerStyle beerStyle,
                                    @RequestParam(required = false) Boolean showInventory){
-        return beerService.listBeers(beerName, beerStyle, false);
+        return beerService.listBeers(beerName, beerStyle, showInventory);
     }
 
 
