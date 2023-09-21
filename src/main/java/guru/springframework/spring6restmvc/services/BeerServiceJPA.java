@@ -39,7 +39,7 @@ public class BeerServiceJPA implements BeerService {
             beerList = beerRepository.findAll();
         }
 
-        if (showInventory != null && showInventory) {
+        if (showInventory != null && !showInventory) {
             beerList.forEach(beer -> beer.setQuantityOnHand(null));
         }
 

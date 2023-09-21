@@ -23,8 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,7 +73,7 @@ class BeerControllerIT {
                         .param("showInventory","false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(equalTo(310)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(equalTo(null)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(equalTo(nullValue())))
                 .andDo(print());
     }
 
