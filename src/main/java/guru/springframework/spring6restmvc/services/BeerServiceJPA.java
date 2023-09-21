@@ -31,7 +31,7 @@ public class BeerServiceJPA implements BeerService {
         if (StringUtils.hasText(beerName)) {
             beerList = beerRepository.findBeerByBeerNameIsLikeIgnoreCase(beerName);
         } else if (StringUtils.hasText(beerStyle.toString())) {
-            beerList = beerRepository.findBeerByBeerStyleIsLikeIgnoreCase(beerStyle);
+            beerList = beerRepository.findBeerByBeerStyle(beerStyle);
         } else {
             beerList = beerRepository.findAll();
         }
