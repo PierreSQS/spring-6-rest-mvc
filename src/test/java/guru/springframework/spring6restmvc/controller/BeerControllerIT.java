@@ -57,9 +57,9 @@ class BeerControllerIT {
     @Test
     void testListBeersByBeerStyle() throws Exception {
         mockMvc.perform((get(BeerController.BEER_PATH))
-                        .param("beerName", BeerStyle.IPA.toString()))
+                        .param("beerStyle", BeerStyle.IPA.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(equalTo(10)))
+                .andExpect(jsonPath("$.size()").value(equalTo(548)))
                 .andDo(print());
     }
     @Test
