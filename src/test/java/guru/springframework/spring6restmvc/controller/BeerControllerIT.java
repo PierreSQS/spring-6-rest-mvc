@@ -126,8 +126,9 @@ class BeerControllerIT {
 
     @Test
     void testDeleteByIDNotFound() {
+        UUID beerId = UUID.randomUUID();
         assertThrows(NotFoundException.class, () ->
-                beerController.deleteById(UUID.randomUUID()));
+                beerController.deleteById(beerId));
     }
 
     @Rollback
@@ -144,8 +145,10 @@ class BeerControllerIT {
 
     @Test
     void testUpdateNotFound() {
-        assertThrows(NotFoundException.class, () ->
-                beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
+        UUID beerId = UUID.randomUUID();
+        BeerDTO build = BeerDTO.builder().build();
+
+        assertThrows(NotFoundException.class, () ->  beerController.updateById(beerId, build));
     }
 
     @Rollback
@@ -188,11 +191,13 @@ class BeerControllerIT {
 
     @Test
     void testBeerIdNotFound() {
+        UUID beerId = UUID.randomUUID();
         assertThrows(NotFoundException.class, () ->
-                beerController.getBeerById(UUID.randomUUID()));
+                beerController.getBeerById(beerId));
     }
 
     @Test
+
     void testGetById() {
         Beer beer = beerRepository.findAll().get(0);
 
