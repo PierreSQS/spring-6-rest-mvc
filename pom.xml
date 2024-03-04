@@ -15,7 +15,8 @@
     <description>spring-6-rest-mvc</description>
     <properties>
         <java.version>17</java.version>
-        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <opencv.version>5.9</opencv.version>
     </properties>
     <dependencies>
         <dependency>
@@ -60,7 +61,7 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.7.0</version>
+            <version>${opencv.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
