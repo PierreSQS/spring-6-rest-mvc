@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,16 +26,16 @@ class BeerRepositoryTest {
 
     @Test
     void testGetBeerListByName() {
-        List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%");
+        List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%", PageRequest.of(0,50));
 
-        assertThat(list.size()).isEqualTo(336);
+        assertThat(list).hasSize(50);
     }
 
     @Test
     void testSaveBeerNameTooLong() {
 
         assertThrows(ConstraintViolationException.class, () -> {
-            Beer savedBeer = beerRepository.save(Beer.builder()
+            beerRepository.save(Beer.builder()
                     .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
                     .beerStyle(BeerStyle.PALE_ALE)
                     .upc("234234234234")
