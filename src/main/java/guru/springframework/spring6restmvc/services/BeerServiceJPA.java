@@ -72,7 +72,9 @@ public class BeerServiceJPA implements BeerService {
             }
         }
 
-        return PageRequest.of(queryPageNumber,queryPageSize);
+        Sort sort = Sort.by(Sort.Direction.ASC,"beerName");
+
+        return PageRequest.of(queryPageNumber,queryPageSize, sort);
 
     }
 
