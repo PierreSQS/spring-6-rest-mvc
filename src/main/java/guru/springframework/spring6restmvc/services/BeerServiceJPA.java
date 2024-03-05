@@ -11,13 +11,12 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Modified by Pierrot, 08.02.2023.
+ * Adapted by Pierrot, 05.03.2024.
  */
 @Service
 @Primary
@@ -42,18 +41,12 @@ public class BeerServiceJPA implements BeerService {
         } else if (StringUtils.hasText(beerName) && beerStyle != null){
             beerPage = listBeersByNameAndStyle(beerName, beerStyle, pageRequest);
         } else {
-            beerPage = new PageImpl<>( beerRepository.findAll());
+            beerPage = beerRepository.findAll(pageRequest);
         }
 
         if (showInventory != null && !showInventory) {
             beerPage.forEach(beer -> beer.setQuantityOnHand(null));
         }
-
-//        List<BeerDTO> beerDTOList = beerPage.stream()
-//                .map(beerMapper::beerToBeerDto)
-//                .toList();
-//
-//        return new PageImpl<>(beerDTOList);
 
         return beerPage.map(beerMapper::beerToBeerDto);
     }
@@ -79,7 +72,7 @@ public class BeerServiceJPA implements BeerService {
             }
         }
 
-        return PageRequest.of(queryPageNumber,queryPageSize, Sort.Direction.ASC);
+        return PageRequest.of(queryPageNumber,queryPageSize);
 
     }
 
