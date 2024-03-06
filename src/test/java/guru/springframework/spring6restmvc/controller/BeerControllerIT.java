@@ -30,6 +30,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +63,8 @@ class BeerControllerIT {
                         .queryParam("pageSize", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size", is(50)))
-                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()))
+                .andDo(print());
     }
 
 
@@ -114,7 +116,8 @@ class BeerControllerIT {
                 .andExpect(jsonPath("$.first", is(true)))
                 .andExpect(jsonPath("$.size", is(25)))
                 .andExpect(jsonPath("$.totalElements", is(336)))
-                .andExpect(jsonPath("$.totalPages", is(14)));
+                .andExpect(jsonPath("$.totalPages", is(14)))
+                .andDo(print());
     }
 
     @Test
