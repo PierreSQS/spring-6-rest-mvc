@@ -10,12 +10,12 @@ import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -28,6 +28,9 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
+    private static final String BEER_CSV_FILE = "csvdata/beers.csv";
+
+    private final ResourceLoader resourceLoader;
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
     private final BeerCsvService beerCsvService;
@@ -40,9 +43,9 @@ public class BootstrapData implements CommandLineRunner {
         loadCustomerData();
     }
 
-    private void loadCsvData() throws FileNotFoundException {
+    private void loadCsvData() throws IOException {
         if (beerRepository.count() < 10){
-            File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
+            File file = resourceLoader.getResource("classpath:"+BEER_CSV_FILE).getFile();
 
             List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
 
