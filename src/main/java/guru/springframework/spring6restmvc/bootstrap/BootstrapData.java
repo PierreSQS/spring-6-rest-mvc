@@ -10,12 +10,15 @@ import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2024.05.04.
  */
 @Component
 @RequiredArgsConstructor
@@ -45,9 +48,12 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadCsvData() throws IOException {
         if (beerRepository.count() < 10){
-            File file = resourceLoader.getResource("classpath:"+BEER_CSV_FILE).getFile();
+            Resource resource = resourceLoader.getResource("classpath:"+BEER_CSV_FILE);
+            InputStream inputStream = resource.getInputStream();
 
-            List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            List<BeerCSVRecord> recs = beerCsvService.convertCSV(bufferedReader);
 
             recs.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {

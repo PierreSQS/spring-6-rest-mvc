@@ -4,8 +4,10 @@ import guru.springframework.spring6restmvc.model.BeerCSVRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +21,7 @@ class BeerCsvServiceImplTest {
 
         File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
 
-        List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
+        List<BeerCSVRecord> recs = beerCsvService.convertCSV(new BufferedReader(new FileReader(file)));
 
         System.out.println(recs.size());
 
