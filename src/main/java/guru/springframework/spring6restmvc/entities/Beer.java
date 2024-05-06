@@ -60,4 +60,12 @@ public class Beer {
 
     @UpdateTimestamp
     private LocalDateTime updateDate;
+
+    @Override
+    public String toString() {
+        return "Beer{" +
+                "beerName='" + beerName + '\'' +
+                ", beerStyle=" + beerStyle +
+                '}';
+    }
 }
