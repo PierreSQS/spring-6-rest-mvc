@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -28,8 +27,7 @@ import java.util.UUID;
 public class Beer {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
@@ -39,7 +37,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 50, message = "BeerName's length muss be maximal 50")
     @Column(length = 50)
     private String beerName;
 
@@ -48,7 +46,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Size(max = 255)
+    @Size(max = 50)
     private String upc;
     private Integer quantityOnHand;
 

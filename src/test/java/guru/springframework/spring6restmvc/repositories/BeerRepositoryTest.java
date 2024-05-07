@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -34,16 +35,25 @@ class BeerRepositoryTest {
     @Test
     void testSaveBeerNameTooLong() {
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            beerRepository.save(Beer.builder()
-                    .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
-                    .beerStyle(BeerStyle.PALE_ALE)
-                    .upc("234234234234")
-                    .price(new BigDecimal("11.99"))
-                    .build());
+        Beer beer = Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .upc("234234234234")
+                .price(new BigDecimal("11.99"))
+                .build();
 
-            beerRepository.flush();
-        });
+        beerRepository.save(beer);
+
+
+        // assertJ assertion
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> beerRepository.flush())
+                .withMessageContaining("BeerName's length muss be maximal 50");
+
+
+        // Junit5 assertion
+        assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
+
     }
 
     @Test
