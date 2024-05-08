@@ -26,6 +26,6 @@ class BeerCsvServiceImplTest {
 
         log.info("BeerCSVRecords amount: {}",recs.size());
 
-        assertThat(recs.size()).isPositive();
+        assertThat(recs).isNotEmpty();
     }
 }
