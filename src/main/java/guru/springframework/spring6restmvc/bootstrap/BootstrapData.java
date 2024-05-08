@@ -8,6 +8,7 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
@@ -21,12 +22,14 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Modified by Pierrot on 2024.05.08.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
@@ -50,7 +53,11 @@ public class BootstrapData implements CommandLineRunner {
             List<BeerCSVRecord> recs = beerCsvService
                     .convertCSV(new BufferedReader(new InputStreamReader(resource.getInputStream())));
 
-            recs.forEach(beerCSVRecord -> {
+            List<BeerCSVRecord> sortedCsvRecords = recs.stream()
+                    .sorted(Comparator.comparing(BeerCSVRecord::getBeer))
+                    .toList();
+
+            sortedCsvRecords.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
                     case "American Pale Lager" -> BeerStyle.LAGER;
                     case "American Pale Ale (APA)", "American Black Ale", "Belgian Dark Ale", "American Blonde Ale" ->
@@ -64,15 +71,21 @@ public class BootstrapData implements CommandLineRunner {
                     default -> BeerStyle.PILSNER;
                 };
 
-                beerRepository.save(Beer.builder()
-                                .beerName(StringUtils.abbreviate(beerCSVRecord.getBeer(), 50))
-                                .beerStyle(beerStyle)
-                                .price(BigDecimal.TEN)
-                                .upc(beerCSVRecord.getRow().toString())
-                                .quantityOnHand(beerCSVRecord.getCount())
-                        .build());
+                Beer beer = Beer.builder()
+                        .beerName(StringUtils.abbreviate(beerCSVRecord.getBeer(), 50))
+                        .beerStyle(beerStyle)
+                        .price(BigDecimal.TEN)
+                        .upc(beerCSVRecord.getRow().toString())
+                        .quantityOnHand(beerCSVRecord.getCount())
+                        .build();
+
+                beerRepository.save(beer);
+
+                log.debug("## Saved Beer: {} ##",beer);
             });
         }
+
+
     }
 
     private void loadBeerData() {
