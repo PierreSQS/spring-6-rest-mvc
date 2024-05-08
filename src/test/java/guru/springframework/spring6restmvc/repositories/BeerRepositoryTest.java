@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @DataJpaTest
 @Import({BootstrapData.class, BeerCsvServiceImpl.class})
@@ -26,24 +26,27 @@ class BeerRepositoryTest {
 
     @Test
     void testGetBeerListByName() {
-        Page<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%", PageRequest.of(0,50));
+        Page<Beer> list = beerRepository
+                .findAllByBeerNameIsLikeIgnoreCase("%IPA%", PageRequest.of(0,50));
 
         assertThat(list).hasSize(50);
     }
 
     @Test
     void testSaveBeerNameTooLong() {
+        Beer beer = Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .upc("234234234234")
+                .price(new BigDecimal("11.99"))
+                .build();
+        beerRepository.save(beer);
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            beerRepository.save(Beer.builder()
-                    .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
-                    .beerStyle(BeerStyle.PALE_ALE)
-                    .upc("234234234234")
-                    .price(new BigDecimal("11.99"))
-                    .build());
+        // assertJ Exception Assertion
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() ->beerRepository.flush())
+                .withMessageContaining("BeerName length must be maximal 50");
 
-            beerRepository.flush();
-        });
     }
 
     @Test
