@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot 09.05.2024
  */
 @Builder
 @Data
@@ -21,9 +21,16 @@ public class BeerDTO {
     @NotBlank
     @NotNull
     private String beerName;
+
+    @NotNull
     private BeerStyle beerStyle;
+
+    @NotNull
+    @NotBlank
     private String upc;
     private Integer quantityOnHand;
+
+    @NotNull
     private BigDecimal price;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
