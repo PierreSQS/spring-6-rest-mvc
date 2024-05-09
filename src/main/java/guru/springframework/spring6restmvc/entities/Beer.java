@@ -49,11 +49,11 @@ public class Beer {
     @Column(length = 50)
     private String beerName;
 
-    @NotNull
+    @NotNull(message = "BeerStyle must not be null")
     private BeerStyle beerStyle;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Beer UPC must be blank")
     @Size(max = 255)
     private String upc;
     private Integer quantityOnHand;

@@ -48,6 +48,22 @@ class BeerRepositoryTest {
         // Junit5 Exception Assertion
         assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
     }
+    @Test
+    void testSaveBeerNameTooLongBeerStyleNullUpcBlank() {
+        beerRepository.save(Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .upc("")
+                .price(new BigDecimal("11.99"))
+                .build());
+
+        // assertJ Exception Assertion
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> beerRepository.flush())
+                .withMessageContainingAll("BeerName Length must be maximal 50",
+                        "BeerStyle must not be null",
+                        "Beer UPC must be blank");
+
+    }
 
     @Test
     void testSaveBeer() {
