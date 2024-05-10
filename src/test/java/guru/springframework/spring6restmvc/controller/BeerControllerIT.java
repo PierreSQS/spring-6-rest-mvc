@@ -41,7 +41,7 @@ class BeerControllerIT {
     @Transactional
     @Test
     void deleteByIdFound() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         ResponseEntity<Void> responseEntity = beerController.deleteById(beer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
@@ -60,7 +60,7 @@ class BeerControllerIT {
     @Transactional
     @Test
     void updateExistingBeer() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
         beerDTO.setId(null);
         beerDTO.setVersion(null);
@@ -102,7 +102,7 @@ class BeerControllerIT {
 
     @Test
     void testGetById() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         BeerDTO dto = beerController.getBeerById(beer.getId());
 

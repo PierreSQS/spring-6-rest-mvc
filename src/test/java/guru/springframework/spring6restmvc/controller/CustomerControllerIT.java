@@ -35,7 +35,7 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void deleteByIdFound() {
-        Customer customer = customerRepository.findAll().get(0);
+        Customer customer = customerRepository.findAll().getFirst();
 
         ResponseEntity<Void> responseEntity = customerController.deleteCustomerById(customer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
@@ -61,7 +61,7 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void updateExistingBeer() {
-        Customer customer = customerRepository.findAll().get(0);
+        Customer customer = customerRepository.findAll().getFirst();
         CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
         customerDTO.setId(null);
         customerDTO.setVersion(null);
@@ -120,7 +120,7 @@ class CustomerControllerIT {
 
     @Test
     void testGetById() {
-        Customer customer = customerRepository.findAll().get(0);
+        Customer customer = customerRepository.findAll().getFirst();
         CustomerDTO customerDTO = customerController.getCustomerById(customer.getId());
         assertThat(customerDTO).isNotNull();
     }
