@@ -69,7 +69,7 @@ class BeerControllerTest {
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
 
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
-        assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
+        assertThat(beerMap).containsEntry("beerName",beerArgumentCaptor.getValue().getBeerName());
     }
 
     @Test
@@ -94,12 +94,42 @@ class BeerControllerTest {
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent());
 
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
+    }
+    @Test
+    void testUpdateBeerBlankBeerName() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().get(0);
+        beer.setBeerName("");
+
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
+
+        MvcResult mvcResult = mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1))).andReturn();
+
+        System.out.println("The Response: "+mvcResult.getResponse().getContentAsString());
+
+    }
+    @Test
+    void testUpdateBeerNotFound() throws Exception {
+        BeerDTO beer = BeerDTO.builder().build();
+
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(beer));
+
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isNotFound()).andReturn();
+
     }
 
     @Test
@@ -134,7 +164,7 @@ class BeerControllerTest {
     }
 
     @Test
-    void testCreateBeerNullBeerName() throws Exception {
+    void testCreateBeerNullBeerNameNullUPCNullBeerStyleNullPrice() throws Exception {
 
         BeerDTO beerDTO = BeerDTO.builder().build();
 
