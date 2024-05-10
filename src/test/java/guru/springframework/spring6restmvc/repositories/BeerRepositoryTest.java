@@ -48,6 +48,7 @@ class BeerRepositoryTest {
         // Junit5 Exception Assertion
         assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
     }
+    // Not a good test, tests too many things
     @Test
     void testSaveBeerNameTooLongBeerStyleNullUpcBlank() {
         beerRepository.save(Beer.builder()
