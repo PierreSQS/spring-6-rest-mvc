@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -21,16 +22,22 @@ class BeerRepositoryTest {
     @Test
     void testSaveBeerNameTooLong() {
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            Beer savedBeer = beerRepository.save(Beer.builder()
-                    .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
-                    .beerStyle(BeerStyle.PALE_ALE)
-                    .upc("234234234234")
-                    .price(new BigDecimal("11.99"))
-                    .build());
+        beerRepository.save(Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .upc("234234234234")
+                .price(new BigDecimal("11.99"))
+                .build());
 
-            beerRepository.flush();
-        });
+
+        // AssertJ Exception Assertion
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> beerRepository.flush())
+                .withMessageContaining("asasas");
+
+
+        // Junit5 Exception Assertion
+        assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
     }
 
     @Test
