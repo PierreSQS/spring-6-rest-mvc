@@ -32,7 +32,7 @@ class BeerRepositoryTest {
         // AssertJ Exception Assertion
         assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> beerRepository.flush())
-                .withMessageContaining("");
+                .withMessageContaining("BeerName's length muss be maximal 50");
 
         // Junit Exception Assertion
         assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
