@@ -5,8 +5,10 @@ import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
+import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,11 +24,20 @@ import java.util.UUID;
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerCsvService beerCsvService;
+    private final Resource resource;
 
     @Override
     public void run(String... args) {
         loadBeerData();
+        loadCsvBeerData();
         loadCustomerData();
+    }
+
+    private void loadCsvBeerData() {
+        if (beerRepository.count() < 10) {
+
+        }
     }
 
     private void loadBeerData() {
