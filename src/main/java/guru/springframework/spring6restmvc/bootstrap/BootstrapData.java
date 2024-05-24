@@ -2,40 +2,53 @@ package guru.springframework.spring6restmvc.bootstrap;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.entities.Customer;
+import guru.springframework.spring6restmvc.model.BeerCSVRecord;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot, 23.05.2024
+ * Modified by Pierrot, 24.05.2024
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
     private final BeerCsvService beerCsvService;
-    private final Resource resource;
+    private final ResourceLoader resourceLoader;
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws IOException {
         loadBeerData();
         loadCsvBeerData();
         loadCustomerData();
     }
 
-    private void loadCsvBeerData() {
+    private void loadCsvBeerData() throws IOException {
         if (beerRepository.count() < 10) {
+            Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
+            List<BeerCSVRecord> beerCSVRecords = beerCsvService.convertCSV(
+                    new BufferedReader(new InputStreamReader(resource.getInputStream())));
+
+            log.info("##### The Beer CSV Records: {} #####\n",beerCSVRecords.size());
 
         }
     }
