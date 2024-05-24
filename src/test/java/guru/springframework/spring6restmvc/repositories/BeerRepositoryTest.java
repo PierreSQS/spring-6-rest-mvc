@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -27,22 +28,26 @@ class BeerRepositoryTest {
     void testGetBeerListByName() {
         List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%");
 
-        assertThat(list.size()).isEqualTo(336);
+        assertThat(list).hasSize(336);
     }
 
     @Test
     void testSaveBeerNameTooLong() {
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            Beer savedBeer = beerRepository.save(Beer.builder()
-                    .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
-                    .beerStyle(BeerStyle.PALE_ALE)
-                    .upc("234234234234")
-                    .price(new BigDecimal("11.99"))
-                    .build());
+        beerRepository.save(Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .upc("234234234234")
+                .price(new BigDecimal("11.99"))
+                .build());
 
-            beerRepository.flush();
-        });
+        // assertJ Exception assertion
+        assertThatExceptionOfType(ConstraintViolationException.class)
+                .isThrownBy(() -> beerRepository.flush())
+                .withMessageContaining("BeerName's Length must be maximal 50");
+
+        // Junit5 Exception assertion
+        assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
     }
 
     @Test
