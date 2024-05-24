@@ -38,7 +38,7 @@ public class BeerController {
     @DeleteMapping(BEER_PATH_ID)
     public ResponseEntity<Void> deleteById(@PathVariable("beerId") UUID beerId){
 
-        if(! beerService.deleteById(beerId)){
+        if(Boolean.FALSE.equals( beerService.deleteById(beerId))){
             throw new NotFoundException();
         }
 
@@ -69,8 +69,10 @@ public class BeerController {
     @GetMapping(value = BEER_PATH)
     public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
                                    @RequestParam(required = false) BeerStyle beerStyle,
-                                   @RequestParam(required = false) Boolean showInventory){
-        return beerService.listBeers(beerName, beerStyle, showInventory);
+                                   @RequestParam(required = false) Boolean showInventory,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize){
+        return beerService.listBeers(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
 
