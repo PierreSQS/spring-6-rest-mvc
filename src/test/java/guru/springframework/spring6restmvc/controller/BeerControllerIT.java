@@ -122,7 +122,8 @@ class BeerControllerIT {
 
     @Test
     void testDeleteByIDNotFound() {
-        assertThrows(NotFoundException.class, () -> beerController.deleteById(UUID.randomUUID()));
+        UUID randomUUID = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.deleteById(randomUUID));
     }
 
     @Rollback
@@ -139,7 +140,9 @@ class BeerControllerIT {
 
     @Test
     void testUpdateNotFound() {
-        assertThrows(NotFoundException.class, () -> beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
+        UUID randomUUID = UUID.randomUUID();
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        assertThrows(NotFoundException.class, () -> beerController.updateById(randomUUID, beerDTO));
     }
 
     @Rollback
@@ -182,7 +185,8 @@ class BeerControllerIT {
 
     @Test
     void testBeerIdNotFound() {
-        assertThrows(NotFoundException.class, () -> beerController.getBeerById(UUID.randomUUID()));
+        UUID randomUUID = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.getBeerById(randomUUID));
     }
 
     @Test
@@ -198,7 +202,7 @@ class BeerControllerIT {
     void testListBeers() {
         List<BeerDTO> dtos = beerController.listBeers(null, null, false);
 
-        assertThat(dtos.size()).isEqualTo(2413);
+        assertThat(dtos).hasSize(2413);
     }
 
     @Rollback

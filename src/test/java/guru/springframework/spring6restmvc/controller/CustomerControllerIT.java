@@ -45,12 +45,15 @@ class CustomerControllerIT {
 
     @Test
     void testDeleteNotFound() {
-        assertThrows(NotFoundException.class, () -> customerController.deleteCustomerById(UUID.randomUUID()));
+        UUID randomUUID = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> customerController.deleteCustomerById(randomUUID));
     }
 
     @Test
     void testUpdateNotFound() {
-        assertThrows(NotFoundException.class, () -> customerController.updateCustomerByID(UUID.randomUUID(), CustomerDTO.builder().build()));
+        UUID randomUUID = UUID.randomUUID();
+        CustomerDTO customerDTO = CustomerDTO.builder().build();
+        assertThrows(NotFoundException.class, () -> customerController.updateCustomerByID(randomUUID, customerDTO));
     }
 
     @Rollback
@@ -105,12 +108,13 @@ class CustomerControllerIT {
     void testListAll() {
         List<CustomerDTO> dtos = customerController.listAllCustomers();
 
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos).hasSize(3);
     }
 
     @Test
     void testGetByIdNotFound() {
-        assertThrows(NotFoundException.class, () -> customerController.getCustomerById(UUID.randomUUID()));
+        UUID randomUUID = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> customerController.getCustomerById(randomUUID));
     }
 
     @Test
