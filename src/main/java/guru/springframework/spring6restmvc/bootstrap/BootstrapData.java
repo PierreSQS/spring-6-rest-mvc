@@ -9,6 +9,7 @@ import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -68,7 +69,7 @@ public class BootstrapData implements CommandLineRunner {
                 };
 
                 Beer beer = Beer.builder()
-                        .beerName(beerCSVRecord.getBeer())
+                        .beerName(StringUtils.abbreviate(beerCSVRecord.getBeer(), 50))
                         .beerStyle(beerStyle)
                         .price(BigDecimal.TEN)
                         .upc(beerCSVRecord.getRow().toString())
