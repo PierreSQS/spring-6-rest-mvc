@@ -23,6 +23,6 @@ class BeerCsvServiceImplTest {
 
         System.out.println(recs.size());
 
-        assertThat(recs.size()).isGreaterThan(0);
+        assertThat(recs).isNotEmpty();
     }
 }
