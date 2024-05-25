@@ -30,7 +30,7 @@ class BeerRepositoryTest {
         Page<Beer> list = beerRepository
                 .findAllByBeerNameIsLikeIgnoreCase("%IPA%", PageRequest.of(1,25));
 
-        assertThat(list).hasSize(336);
+        assertThat(list).hasSize(25);
     }
 
     @Test
