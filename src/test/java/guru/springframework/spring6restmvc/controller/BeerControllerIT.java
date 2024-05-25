@@ -66,7 +66,7 @@ class BeerControllerIT {
                         .queryParam("pageSize", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()", is(50)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
     }
     @Test
     void tesListBeersByStyleAndNameShowInventoryTrue() throws Exception {
@@ -76,7 +76,7 @@ class BeerControllerIT {
                         .queryParam("showInventory", "true"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()", is(25)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
     }
 
     @Test
@@ -87,7 +87,7 @@ class BeerControllerIT {
                         .queryParam("showInventory", "false"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()", is(25)))
-                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.nullValue()));
+                .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.nullValue()));
     }
 
     @Test
