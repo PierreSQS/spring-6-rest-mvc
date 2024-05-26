@@ -33,7 +33,6 @@ class BootstrapDataTest {
 
     @BeforeEach
     void setUp() {
-        resourceLoader.getResource("classpath:csvdata/beers.csv");
         bootstrapData = new BootstrapData(beerRepository, customerRepository, csvService, resourceLoader);
     }
 

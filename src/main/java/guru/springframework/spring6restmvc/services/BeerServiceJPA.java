@@ -8,19 +8,17 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Modified by Pierrot, 25.05.2024
+ * Modified by Pierrot, 26.05.2024
  */
 @Service
 @Primary
@@ -52,11 +50,8 @@ public class BeerServiceJPA implements BeerService {
             beerPage.forEach(beer -> beer.setQuantityOnHand(null));
         }
 
-        List<BeerDTO> beerDTOList = beerPage.stream()
-                .map(beerMapper::beerToBeerDto)
-                .toList();
+        return beerPage.map(beerMapper::beerToBeerDto);
 
-        return new PageImpl<>(beerDTOList);
     }
 
     public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
