@@ -73,9 +73,10 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
-                        .queryParam("showInventory", "true"))
+                        .queryParam("showInventory", "true")
+                        .queryParam("pageSize", "350"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(25)))
+                .andExpect(jsonPath("$.content.size()", is(310)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
     }
 
@@ -84,9 +85,10 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
-                        .queryParam("showInventory", "false"))
+                        .queryParam("showInventory", "false")
+                        .queryParam("pageSize", "350"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(25)))
+                .andExpect(jsonPath("$.content.size()", is(310)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.nullValue()));
     }
 
@@ -94,25 +96,28 @@ class BeerControllerIT {
     void tesListBeersByStyleAndName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
-                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "350"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(25)));
+                .andExpect(jsonPath("$.content.size()", is(310)));
     }
 
     @Test
     void tesListBeersByStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", "550"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(25)));
+                .andExpect(jsonPath("$.content.size()", is(548)));
     }
 
     @Test
     void tesListBeersByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                .queryParam("beerName", "IPA"))
+                .queryParam("beerName", "IPA")
+                .queryParam("pageSize", "350"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(25)));
+                .andExpect(jsonPath("$.content.size()", is(336)));
     }
 
     @Test
@@ -211,9 +216,9 @@ class BeerControllerIT {
     @Test
     void testListBeers() {
         Page<BeerDTO> dtos = beerController
-                .listBeers(null, null, false, 1, 25);
+                .listBeers(null, null, false, 1, 2413);
 
-        assertThat(dtos).hasSize(25);
+        assertThat(dtos).hasSize(1000);
     }
 
     @Rollback
