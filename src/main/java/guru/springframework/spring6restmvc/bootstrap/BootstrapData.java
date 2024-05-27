@@ -47,7 +47,8 @@ public class BootstrapData implements CommandLineRunner {
         if (beerRepository.count() < 10){
             Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
 
-            List<BeerCSVRecord> recs = beerCsvService.convertCSV(new BufferedReader(new InputStreamReader(resource.getInputStream())));
+            List<BeerCSVRecord> recs = beerCsvService
+                    .convertCSV(new BufferedReader(new InputStreamReader(resource.getInputStream())));
 
             recs.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {

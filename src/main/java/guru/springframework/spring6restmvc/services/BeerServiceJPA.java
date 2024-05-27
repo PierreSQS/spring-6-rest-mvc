@@ -25,16 +25,16 @@ import java.util.concurrent.atomic.AtomicReference;
 @Primary
 @RequiredArgsConstructor
 public class BeerServiceJPA implements BeerService {
-    private static final int DEFAULT_PAGE_NUMBER = 0;
-    private static final int DEFAULT_PAGE_SIZE = 25;
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 25;
+
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
     @Override
     public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
 
-        PageRequest pageRequest = buildPageRequest(pageNumber,pageSize);
-
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
         Page<Beer> beerPage;
 
         if(StringUtils.hasText(beerName) && beerStyle == null) {
