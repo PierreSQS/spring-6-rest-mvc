@@ -7,7 +7,6 @@ import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import org.hamcrest.core.IsNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
@@ -30,6 +30,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,10 +52,6 @@ class BeerControllerIT {
     @Autowired
     MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-
-    }
 
     @Test
     void tesListBeersByStyleAndNameShowInventoryTruePage2() throws Exception {
@@ -73,10 +70,9 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
-                        .queryParam("showInventory", "true")
-                        .queryParam("pageSize", "350"))
+                        .queryParam("showInventory", "true"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(310)))
+                .andExpect(jsonPath("$.page.totalElements", is(310)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(IsNull.notNullValue()));
     }
 
@@ -117,7 +113,11 @@ class BeerControllerIT {
                 .queryParam("beerName", "IPA")
                 .queryParam("pageSize", "350"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.size()", is(336)));
+                .andExpect(jsonPath("$.page.number", is(0)))
+                .andExpect(jsonPath("$.page.size", is(350)))
+                .andExpect(jsonPath("$.page.totalElements", is(336)))
+                .andExpect(jsonPath("$.page.totalPages", is(1)))
+                .andDo(print());
     }
 
     @Test
@@ -127,18 +127,22 @@ class BeerControllerIT {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
 
-        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
+        MvcResult result = mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andReturn();
 
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test
     void testDeleteByIDNotFound() {
-        UUID randomUUID = UUID.randomUUID();
-        assertThrows(NotFoundException.class, () -> beerController.deleteById(randomUUID));
+        UUID beerId = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () ->
+                beerController.deleteById(beerId));
     }
 
     @Rollback
@@ -218,7 +222,9 @@ class BeerControllerIT {
         Page<BeerDTO> dtos = beerController
                 .listBeers(null, null, false, 1, 2413);
 
+        assertThat(dtos.getTotalElements()).isEqualTo(2413);
         assertThat(dtos).hasSize(1000);
+        assertThat(dtos.getTotalPages()).isEqualTo(3);
     }
 
     @Rollback
