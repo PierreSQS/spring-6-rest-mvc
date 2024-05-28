@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot on 27-05-2024.
+ * Modified by Pierrot on 28-05-2024.
  */
 @Getter
 @Setter
@@ -57,4 +57,13 @@ public class BeerOrderLine {
 
     private Integer orderQuantity = 0;
     private Integer quantityAllocated = 0;
+
+    @ManyToOne
+    @JoinColumn(name = "beer_order_id")
+    private BeerOrder beerOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "beer_id")
+    private Beer beer;
+
 }
