@@ -45,11 +45,11 @@ import java.util.UUID;
 @Builder
 public class BeerOrder {
 
-    public BeerOrder(Set<BeerOrderLine> beerOrderLines, Timestamp createdDate,
-                     Customer customer, String customerRef, UUID id, Timestamp lastModifiedDate, Long version) {
+    public BeerOrder(UUID id, Timestamp createdDate,
+                     Customer customer, String customerRef, Set<BeerOrderLine> beerOrderLines , Timestamp lastModifiedDate, Long version) {
         this.beerOrderLines = beerOrderLines;
         this.createdDate = createdDate;
-        this.customer = customer;
+        this.setCustomer(customer);
         this.customerRef = customerRef;
         this.id = id;
         this.lastModifiedDate = lastModifiedDate;

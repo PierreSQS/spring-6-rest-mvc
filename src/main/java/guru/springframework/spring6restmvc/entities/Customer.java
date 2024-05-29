@@ -33,6 +33,7 @@ public class Customer {
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "customer")
     private Set<BeerOrder> beerOrders = new HashSet<>();
 }
