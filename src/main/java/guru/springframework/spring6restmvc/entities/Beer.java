@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot, 28.05.2024
+ * Modified by Pierrot, 29.05.2024
  */
 @Getter
 @Setter
@@ -66,4 +66,10 @@ public class Beer {
 
     @OneToMany(mappedBy = "beer")
     private Set<BeerOrderLine> beerOrderLines;
+
+    @ManyToMany
+    @JoinTable(name = "beer_category",
+            joinColumns = @JoinColumn(name = "beer_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 }

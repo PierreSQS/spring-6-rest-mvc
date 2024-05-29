@@ -4,6 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +20,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -46,6 +50,12 @@ public class Category {
     private Timestamp lastModifiedDate;
 
     private String description;
+
+    @ManyToMany
+    @JoinTable(name = "beer_category",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "beer_id"))
+    Set<Beer> beers;
 
     @Override
     public final boolean equals(Object o) {
