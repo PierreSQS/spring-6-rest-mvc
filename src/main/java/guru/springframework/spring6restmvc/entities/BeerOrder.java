@@ -45,8 +45,8 @@ import java.util.UUID;
 @Builder
 public class BeerOrder {
 
-    public BeerOrder(UUID id, Timestamp createdDate,
-                     Customer customer, String customerRef, Set<BeerOrderLine> beerOrderLines , Timestamp lastModifiedDate, Long version) {
+    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer,
+                      Set<BeerOrderLine> beerOrderLines) {
         this.beerOrderLines = beerOrderLines;
         this.createdDate = createdDate;
         this.setCustomer(customer);
