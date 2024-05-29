@@ -42,9 +42,19 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class BeerOrder {
+
+    public BeerOrder(Set<BeerOrderLine> beerOrderLines, Timestamp createdDate,
+                     Customer customer, String customerRef, UUID id, Timestamp lastModifiedDate, Long version) {
+        this.beerOrderLines = beerOrderLines;
+        this.createdDate = createdDate;
+        this.customer = customer;
+        this.customerRef = customerRef;
+        this.id = id;
+        this.lastModifiedDate = lastModifiedDate;
+        this.version = version;
+    }
 
     @Id
     @GeneratedValue
@@ -75,4 +85,8 @@ public class BeerOrder {
     @OneToMany(mappedBy = "beerOrder")
     Set<BeerOrderLine> beerOrderLines;
 
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.getBeerOrders().add(this);
+    }
 }
