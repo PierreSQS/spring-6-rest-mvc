@@ -21,7 +21,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -46,10 +46,10 @@ public class BeerOrderLine {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    private Timestamp lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public boolean isNew() {
         return this.id == null;
