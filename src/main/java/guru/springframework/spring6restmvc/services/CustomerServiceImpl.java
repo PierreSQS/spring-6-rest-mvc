@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private Map<UUID, CustomerDTO> customerMap;
+    private final Map<UUID, CustomerDTO> customerMap;
 
     public CustomerServiceImpl() {
         CustomerDTO customer1 = CustomerDTO.builder()
