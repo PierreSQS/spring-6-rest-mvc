@@ -24,6 +24,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,8 +46,8 @@ import java.util.UUID;
 @Builder
 public class BeerOrder {
 
-    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef, Customer customer,
-                      Set<BeerOrderLine> beerOrderLines) {
+    public BeerOrder(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerRef,
+                     Customer customer, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment) {
         this.beerOrderLines = beerOrderLines;
         this.createdDate = createdDate;
         this.setCustomer(customer);
@@ -54,6 +55,7 @@ public class BeerOrder {
         this.id = id;
         this.lastModifiedDate = lastModifiedDate;
         this.version = version;
+        this.beerOrderShipment = beerOrderShipment;
     }
 
     @Id
@@ -83,7 +85,11 @@ public class BeerOrder {
     private Customer customer;
 
     @OneToMany(mappedBy = "beerOrder")
-    Set<BeerOrderLine> beerOrderLines;
+    private Set<BeerOrderLine> beerOrderLines;
+
+    @OneToOne
+    @JoinColumn(name = "beer_order_shipment_id")
+    private BeerOrderShipment beerOrderShipment;
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
