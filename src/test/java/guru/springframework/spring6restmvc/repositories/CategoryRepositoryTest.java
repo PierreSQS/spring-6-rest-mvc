@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CategoryRepositoryTest {
@@ -21,7 +20,7 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testBeer = beerRepository.findAll().get(0);
+        testBeer = beerRepository.findAll().getFirst();
     }
 
     @Transactional
