@@ -19,6 +19,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -51,11 +52,12 @@ public class Category {
 
     private String description;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "beer_category",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "beer_id"))
-    Set<Beer> beers;
+    Set<Beer> beers = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {

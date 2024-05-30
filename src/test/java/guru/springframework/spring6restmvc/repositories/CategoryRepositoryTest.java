@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
@@ -17,13 +18,14 @@ class CategoryRepositoryTest {
     @Autowired
     CategoryRepository categoryRepo;
 
-    Beer beer;
+    Beer testBeer;
 
     @BeforeEach
     void setUp() {
-        beer = beerRepo.findAll().getFirst();
+        testBeer = beerRepo.findAll().getFirst();
     }
 
+    @Transactional
     @Test
     void testAddCategory() {
         Category beerCategory = Category.builder()
@@ -32,6 +34,8 @@ class CategoryRepositoryTest {
 
         Category savedBeerCat = categoryRepo.save(beerCategory);
 
-        System.out.println("the Beer Name: "+beer.getBeerName());
+        testBeer.addCategory(savedBeerCat);
+
+        System.out.println("the Beer Name: "+ testBeer.getBeerName());
     }
 }
