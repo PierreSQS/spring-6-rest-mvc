@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvc.config.SpringSecConfig;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.services.BeerService;
 import guru.springframework.spring6restmvc.services.BeerServiceImpl;
@@ -11,6 +12,7 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BeerController.class)
+@Import({SpringSecConfig.class})
 class BeerControllerTest {
 
     @Autowired
@@ -70,7 +73,7 @@ class BeerControllerTest {
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
 
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
-        assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
+        assertThat(beerMap).containsEntry("beerName",beerArgumentCaptor.getValue().getBeerName());
     }
 
     @Test
