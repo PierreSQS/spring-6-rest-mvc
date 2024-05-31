@@ -15,9 +15,8 @@ public class BeerCsvServiceImpl implements BeerCsvService {
     @Override
     public List<BeerCSVRecord> convertCSV(Reader reader) {
 
-        List<BeerCSVRecord> beerCSVRecords = new CsvToBeanBuilder<BeerCSVRecord>(reader)
+        return new CsvToBeanBuilder<BeerCSVRecord>(reader)
                 .withType(BeerCSVRecord.class)
                 .build().parse();
-        return beerCSVRecords;
     }
 }
