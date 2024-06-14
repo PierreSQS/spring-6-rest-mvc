@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
- * Created by jt on 2019-01-26.
+ * Modified by Pierrot, 13.06.2024.
  */
 @Getter
 @Setter
@@ -36,11 +36,7 @@ import java.util.UUID;
 public class BeerOrderLine {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
