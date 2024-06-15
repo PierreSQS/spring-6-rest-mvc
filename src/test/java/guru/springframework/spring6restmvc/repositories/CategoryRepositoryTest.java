@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class CategoryRepositoryTest {
     @Autowired
@@ -33,6 +35,8 @@ class CategoryRepositoryTest {
         Beer saveBeer = beerRepository.save(testBeer);
 
         System.out.println(saveBeer.getBeerName());
+
+        assertThat(saveBeer.getCategories()).contains(savedCat);
 
     }
 }
