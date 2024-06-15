@@ -27,8 +27,8 @@ class BeerOrderRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testCustomer = customerRepository.findAll().get(0);
-        testBeer = beerRepository.findAll().get(0);
+        testCustomer = customerRepository.findAll().getFirst();
+        testBeer = beerRepository.findAll().getFirst();
     }
 
     @Transactional
