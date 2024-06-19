@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 19-06-2024.
  */
 @Component
 @RequiredArgsConstructor
@@ -57,6 +57,7 @@ public class BootstrapData implements CommandLineRunner {
                     case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
                     case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
                     case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    case "Gose" -> BeerStyle.GOSE;
                     default -> BeerStyle.PILSNER;
                 };
 

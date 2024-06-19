@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 19-06-2024.
  */
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
 
-    private Map<UUID, BeerDTO> beerMap;
+    private final Map<UUID, BeerDTO> beerMap;
 
     public BeerServiceImpl() {
         this.beerMap = new HashMap<>();
@@ -117,7 +117,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
 
-        log.debug("Get Beer by Id - in service. Id: " + id.toString());
+        log.debug("Get Beer by Id - in service. Id: {}", id.toString());
 
         return Optional.of(beerMap.get(id));
     }
