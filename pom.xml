@@ -136,6 +136,10 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-maven-plugin</artifactId>
                 <version>1.4</version>
+                <configuration>
+                    <apiDocsUrl>http://localhost:8081/v3/api-docs.yaml</apiDocsUrl>
+                    <outputFileName>oa3.yml</outputFileName>
+                </configuration>
                 <executions>
                     <execution>
                         <id>integration-test</id>
