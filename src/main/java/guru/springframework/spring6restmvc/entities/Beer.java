@@ -51,7 +51,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 50, message = "BeerName is too long!")
     @Column(length = 50)
     private String beerName;
 
