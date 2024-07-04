@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -18,6 +19,7 @@ import static io.restassured.RestAssured.given;
 /**
  * Created by Pierrot on 04-07-2024.
  */
+@Profile("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(value = {BeerControllerRestAssuredTest.TestSecurityConfig.class})
 @ComponentScan(basePackages = {"guru.springframework.spring6restmvc"})
@@ -27,7 +29,7 @@ class BeerControllerRestAssuredTest {
     public static class TestSecurityConfig {
 
         @Bean
-        public SecurityFilterChain testFilterChain(HttpSecurity httpSecurity) throws Exception {
+        public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
             httpSecurity.authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/v1/beer").permitAll()
                     .anyRequest().authenticated());
