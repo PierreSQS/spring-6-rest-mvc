@@ -27,7 +27,7 @@ class BeerControllerRestAssuredTest {
     public static class TestSecurityConfig {
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        public SecurityFilterChain testFilterChain(HttpSecurity httpSecurity) throws Exception {
             httpSecurity.authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/v1/beer").permitAll()
                     .anyRequest().authenticated());
