@@ -20,8 +20,12 @@ public class SpringSecConfig {
     @Order(1)
     public SecurityFilterChain actuatorFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll());
+        // alternative to commented out code
+        httpSecurity.securityMatcher(EndpointRequest.toAnyEndpoint())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+
+//        httpSecurity.authorizeHttpRequests(authorize -> authorize
+//                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll());
 
         return httpSecurity.build();
 
