@@ -6,6 +6,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +20,10 @@ class BeerCsvServiceImplTest {
 
         File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
 
-        List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
+        List<BeerCSVRecord> recs = beerCsvService.convertCSV(new FileReader(file));
 
         System.out.println(recs.size());
 
-        assertThat(recs).isEmpty();
+        assertThat(recs).isNotEmpty();
     }
 }
