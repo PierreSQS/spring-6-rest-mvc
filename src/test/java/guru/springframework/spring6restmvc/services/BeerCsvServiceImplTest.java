@@ -22,7 +22,7 @@ class BeerCsvServiceImplTest {
 
         List<BeerCSVRecord> recs = beerCsvService.convertCSV(new FileReader(file));
 
-        System.out.println(recs.size());
+        System.out.format("the CSV-Records amount %d%n",recs.size());
 
         assertThat(recs).isNotEmpty();
     }
