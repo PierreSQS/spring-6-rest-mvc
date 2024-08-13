@@ -21,13 +21,13 @@ import static com.atlassian.oai.validator.whitelist.rule.WhitelistRules.messageH
 import static io.restassured.RestAssured.given;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, on 2024-08-13.
  */
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(BeerControllerRestAssuredTest.TestConfig.class)
 @ComponentScan(basePackages = "guru.springframework.spring6restmvc")
-public class BeerControllerRestAssuredTest {
+class BeerControllerRestAssuredTest {
 
     OpenApiValidationFilter filter = new OpenApiValidationFilter(OpenApiInteractionValidator
             .createForSpecificationUrl("oa3.yml")
@@ -40,9 +40,7 @@ public class BeerControllerRestAssuredTest {
     public static class TestConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-            http.authorizeHttpRequests(authorize -> {
-                authorize.anyRequest().permitAll();
-            });
+            http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
             return http.build();
         }
