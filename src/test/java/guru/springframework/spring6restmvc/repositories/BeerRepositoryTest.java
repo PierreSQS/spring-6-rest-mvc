@@ -44,7 +44,7 @@ class BeerRepositoryTest {
         // AssertJ Exception Assertion
         assertThatExceptionOfType(ConstraintViolationException.class)
                 .isThrownBy(() -> beerRepository.flush())
-                .withMessageContaining("");
+                .withMessageContaining("Beer Name must be maximal 50 long!");
 
         // Junit5 Exception Assertion
         assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
