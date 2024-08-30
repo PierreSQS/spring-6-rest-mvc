@@ -25,6 +25,6 @@ public class BeerOrderLineDTO {
     // the reverse-association BeerOrderLine is not needed
     private BeerDTO beer;
 
-    private Integer orderQuantity = 0;
-    private Integer quantityAllocated = 0;
+    private Integer orderQuantity;
+    private Integer quantityAllocated;
 }
