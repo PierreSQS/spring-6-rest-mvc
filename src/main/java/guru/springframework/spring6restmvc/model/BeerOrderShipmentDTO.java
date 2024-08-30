@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.model;
 
-import guru.springframework.spring6restmvc.entities.BeerOrder;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +15,7 @@ public class BeerOrderShipmentDTO {
     private UUID id;
     private Long version;
 
-    private BeerOrder beerOrder;
+    private BeerOrderDTO beerOrderDTO;
 
     private String trackingNumber;
 

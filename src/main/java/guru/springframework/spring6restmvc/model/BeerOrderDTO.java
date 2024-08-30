@@ -1,8 +1,5 @@
 package guru.springframework.spring6restmvc.model;
 
-import guru.springframework.spring6restmvc.entities.BeerOrderLine;
-import guru.springframework.spring6restmvc.entities.BeerOrderShipment;
-import guru.springframework.spring6restmvc.entities.Customer;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -25,12 +22,12 @@ public class BeerOrderDTO {
 
     @NotBlank
     @NotNull
-    private Customer customer;
+    private CustomerDTO customer;
 
     @NotNull
-    private Set<BeerOrderLine> beerOrderLines;
+    private Set<BeerOrderLineDTO> beerOrderLinesDTO;
 
-    private BeerOrderShipment beerOrderShipment;
+    private BeerOrderShipmentDTO beerOrderShipmentDTO;
 
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;

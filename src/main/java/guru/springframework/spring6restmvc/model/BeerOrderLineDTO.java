@@ -1,12 +1,10 @@
 package guru.springframework.spring6restmvc.model;
 
-import guru.springframework.spring6restmvc.entities.Beer;
-import guru.springframework.spring6restmvc.entities.BeerOrder;
 import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -20,12 +18,12 @@ public class BeerOrderLineDTO {
     @Version
     private Long version;
 
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
-    private Timestamp lastModifiedDate;
-    private BeerOrder beerOrder;
+    private LocalDateTime lastModifiedDate;
 
-    private Beer beer;
+    // the reverse-association BeerOrderLine is not needed
+    private BeerDTO beer;
 
     private Integer orderQuantity = 0;
     private Integer quantityAllocated = 0;
