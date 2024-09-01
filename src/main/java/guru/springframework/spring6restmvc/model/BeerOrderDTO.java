@@ -1,7 +1,5 @@
 package guru.springframework.spring6restmvc.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,23 +12,19 @@ import java.util.UUID;
  */
 @Builder
 @Data
+// updatedDate muß not be mapped
 public class BeerOrderDTO {
     private UUID id;
     private Integer version;
 
     private String customerRef;
-
-    @NotBlank
-    @NotNull
     private CustomerDTO customer;
 
-    @NotNull
     private Set<BeerOrderLineDTO> beerOrderLinesDTO;
 
     private BeerOrderShipmentDTO beerOrderShipmentDTO;
 
     private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
     private LocalDateTime lastModifiedDate;
 
 }

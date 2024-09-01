@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.model;
 
-import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,14 +14,11 @@ import java.util.UUID;
 public class BeerOrderLineDTO {
     private UUID id;
 
-    @Version
     private Long version;
-
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;
 
-    // the reverse-association BeerOrderLine is not needed
     private BeerDTO beer;
 
     private Integer orderQuantity;
