@@ -16,19 +16,17 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface BeerOrderMapper {
 
-    BeerOrder beerOrderDtoToBeerOrder(BeerOrderDTO dto);
+    @Mapping(target = "beerOrder", ignore = true)
+    BeerOrderShipment beerOrderShipmentDtoToBeerOrderShipment(BeerOrderShipmentDTO dto);
 
-    BeerOrderDTO beerOrderToBeerOrderDto(BeerOrder beerOrder);
+    BeerOrderShipmentDTO beerOrderShipmentToBeerOrderShipmentDto(BeerOrderShipment beerOrderShipment);
 
     @Mapping(target = "beerOrder", ignore = true)
     BeerOrderLine beerOrderLineDtoToBeerOrderLine(BeerOrderLineDTO dto);
 
     BeerOrderLineDTO beerOrderLineToBeerOrderLineDto(BeerOrderLine beerOrderLine);
 
-    @Mapping(target = "beerOrder", ignore = true)
-    BeerOrderShipment beerOrderShipmentDtoToBeerOrderShipment(BeerOrderShipmentDTO dto);
+    BeerOrder beerOrderDtoToBeerOrder(BeerOrderDTO dto);
 
-    BeerOrderShipmentDTO beerOrderShipmentToBeerOrderShipmentDto(BeerOrderShipment beerOrderShipment);
-
-
+    BeerOrderDTO beerOrderToBeerOrderDto(BeerOrder beerOrder);
 }
