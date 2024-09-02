@@ -22,6 +22,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -72,6 +73,7 @@ public class BeerOrderLine {
     @ManyToOne
     private Beer beer;
 
-    private Integer orderQuantity = 0;
+    @Min(value = 1, message = "Quantity On Hand must be at least 1")
+    private Integer orderQuantity = 1;
     private Integer quantityAllocated = 0;
 }
