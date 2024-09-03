@@ -61,6 +61,7 @@ public class BootstrapData implements CommandLineRunner {
                     case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
                     case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
                     case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    case "Gose" -> BeerStyle.GOSE;
                     default -> BeerStyle.PILSNER;
                 };
 
