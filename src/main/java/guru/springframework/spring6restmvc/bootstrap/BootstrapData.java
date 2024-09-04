@@ -1,13 +1,18 @@
 package guru.springframework.spring6restmvc.bootstrap;
 
 import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.entities.BeerOrder;
+import guru.springframework.spring6restmvc.entities.BeerOrderLine;
 import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.model.BeerCSVRecord;
 import guru.springframework.spring6restmvc.model.BeerStyle;
+import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
@@ -21,17 +26,21 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Modified by Pierrot, on 2024-08-13.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
+    private final BeerOrderRepository beerOrderRepository;
     private final BeerCsvService beerCsvService;
     private final ResourceLoader resLoader;
 
@@ -41,6 +50,54 @@ public class BootstrapData implements CommandLineRunner {
         loadBeerData();
         loadCsvData();
         loadCustomerData();
+        loadOrderData();
+    }
+
+    private void loadOrderData() {
+        long beerOrders = beerOrderRepository.count();
+        if (beerOrders == 0) {
+            // check all customers and beers
+            val customers = customerRepository.findAll();
+            val beers = beerRepository.findAll();
+
+            // Iterator on  Beer List
+            Iterator<Beer> beerIterator = beers.iterator();
+
+            // Iterate on all Customers, set their BeerOrder and save them
+            customers.forEach(customer -> {
+                beerOrderRepository.save(BeerOrder.builder()
+                        .customer(customer)
+                        .beerOrderLines(Set.of(
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(1)
+                                        .build(),
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(2)
+                                        .build()))
+                        .build());
+
+                beerOrderRepository.save(BeerOrder.builder()
+                        .customer(customer)
+                        .beerOrderLines(Set.of(
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(1)
+                                        .build(),
+
+                                BeerOrderLine.builder()
+                                        .beer(beerIterator.next())
+                                        .orderQuantity(2)
+                                        .build()
+                                ))
+                        .build());
+            });
+
+            int totalCustomer = customers.size();
+
+            log.info("saved {} BeerOrders to {} ", beerOrders,totalCustomer);
+        }
     }
 
     private void loadCsvData() throws IOException {
@@ -108,9 +165,7 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.save(beer1);
-            beerRepository.save(beer2);
-            beerRepository.save(beer3);
+            beerRepository.saveAll(List.of(beer1,beer2,beer3));
         }
 
     }
