@@ -88,8 +88,11 @@ public class BeerOrder {
     }
 
     public void setBeerOrderShipment(BeerOrderShipment beerOrderShipment) {
-        this.beerOrderShipment = beerOrderShipment;
-        beerOrderShipment.setBeerOrder(this);
+        if (beerOrderShipment != null) {
+            this.beerOrderShipment = beerOrderShipment;
+            beerOrderShipment.setBeerOrder(this);
+        }
+
     }
 
     @OneToMany(mappedBy = "beerOrder")
