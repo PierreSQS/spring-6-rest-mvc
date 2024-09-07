@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot, on 2024-08-13.
+ * Modified by Pierrot, on 2024-09-08.
  */
 @Slf4j
 @Component
@@ -65,15 +65,19 @@ public class BootstrapData implements CommandLineRunner {
 
             // Iterate on all Customers, set their BeerOrder and save them
             customers.forEach(customer -> {
+                // Get 2 Beers from the iterator
+                Beer beer1 = beerIterator.next();
+                Beer beer2 = beerIterator.next();
+
                 beerOrderRepository.save(BeerOrder.builder()
                         .customer(customer)
                         .beerOrderLines(Set.of(
                                 BeerOrderLine.builder()
-                                        .beer(beerIterator.next())
+                                        .beer(beer1)
                                         .orderQuantity(1)
                                         .build(),
                                 BeerOrderLine.builder()
-                                        .beer(beerIterator.next())
+                                        .beer(beer2)
                                         .orderQuantity(2)
                                         .build()))
                         .build());
@@ -82,15 +86,14 @@ public class BootstrapData implements CommandLineRunner {
                         .customer(customer)
                         .beerOrderLines(Set.of(
                                 BeerOrderLine.builder()
-                                        .beer(beerIterator.next())
+                                        .beer(beer1)
                                         .orderQuantity(1)
                                         .build(),
 
                                 BeerOrderLine.builder()
-                                        .beer(beerIterator.next())
+                                        .beer(beer2)
                                         .orderQuantity(2)
-                                        .build()
-                                ))
+                                        .build()))
                         .build());
             });
 
