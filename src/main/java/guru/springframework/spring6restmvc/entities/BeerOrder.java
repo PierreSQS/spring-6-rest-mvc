@@ -98,7 +98,7 @@ public class BeerOrder {
 
     }
 
-    @OneToMany(mappedBy = "beerOrder")
+    @OneToMany(mappedBy = "beerOrder", cascade = CascadeType.ALL)
     private Set<BeerOrderLine> beerOrderLines;
 
     @OneToOne(cascade = CascadeType.PERSIST)
