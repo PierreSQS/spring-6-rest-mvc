@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -54,8 +53,7 @@ public class BootstrapData implements CommandLineRunner {
     }
 
     private void loadOrderData() {
-        long beerOrders = beerOrderRepository.count();
-        if (beerOrders == 0) {
+        if (beerOrderRepository.count() == 0) {
             // check all customers and beers
             val customers = customerRepository.findAll();
             val beers = beerRepository.findAll();
@@ -98,8 +96,7 @@ public class BootstrapData implements CommandLineRunner {
             });
 
             int totalCustomer = customers.size();
-
-            log.info("saved {} BeerOrders to {} ", beerOrders,totalCustomer);
+            log.info("loaded {} BeerOrders to {} Customers ", beerOrderRepository.count(),totalCustomer);
         }
     }
 
@@ -133,6 +130,9 @@ public class BootstrapData implements CommandLineRunner {
                                 .quantityOnHand(beerCSVRecord.getCount())
                         .build());
             });
+
+            log.info("loaded {} Beers from CSV-File ", recs.size());
+            log.info("total Beers loaded: {}", beerRepository.count());
         }
     }
 
@@ -168,7 +168,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.saveAll(List.of(beer1,beer2,beer3));
+            List<Beer> additionalBeers = List.of(beer1, beer2, beer3);
+            beerRepository.saveAll(additionalBeers);
+
+            log.info("loaded {} Beers manually", additionalBeers.size());
         }
 
     }
@@ -200,7 +203,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            List<Customer> customers = List.of(customer1, customer2, customer3);
+            customerRepository.saveAll(customers);
+
+            log.info("loaded {} Customers",customers.size());
         }
 
     }
