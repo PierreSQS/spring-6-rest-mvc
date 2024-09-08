@@ -83,8 +83,11 @@ public class BeerOrder {
     private Customer customer;
 
     public void setCustomer(Customer customer) {
-        this.customer = customer;
-        customer.getBeerOrders().add(this);
+        if (customer != null){
+            this.customer = customer;
+            customer.getBeerOrders().add(this);
+        }
+
     }
 
     public void setBeerOrderShipment(BeerOrderShipment beerOrderShipment) {
