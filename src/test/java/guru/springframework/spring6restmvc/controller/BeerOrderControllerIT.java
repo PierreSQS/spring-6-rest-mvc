@@ -2,7 +2,6 @@ package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.entities.BeerOrder;
 import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,10 +27,6 @@ class BeerOrderControllerIT {
 
     @Autowired
     BeerOrderRepository beerOrderRepo;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void listBeerOrders() throws Exception {
