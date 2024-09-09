@@ -30,11 +30,11 @@ public class BeerOrderServiceJPA implements BeerOrderService {
 
     @Override
     public Page<BeerOrderDTO> listOrders(Integer pageNumber, Integer pageSize) {
-        if (pageNumber == null) {
+        if (pageNumber == null || pageNumber < 0) {
             pageNumber = 0;
         }
 
-        if (pageSize == null) {
+        if (pageSize == null || pageSize < 1) {
             pageSize = 25;
         }
 
