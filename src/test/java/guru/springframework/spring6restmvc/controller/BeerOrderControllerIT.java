@@ -39,7 +39,7 @@ class BeerOrderControllerIT {
                         .with(BeerControllerTest.jwtRequestPostProcessor))
                 .andExpect(status().isOk())
                 // 6 is the minimum amount of BeerOrders coming from the BootStrapLoader
-                .andExpect(jsonPath("$.size()", is(greaterThanOrEqualTo(6))))
+                .andExpect(jsonPath("$.content.size()", is(greaterThanOrEqualTo(6))))
                 .andDo(print());
     }
 

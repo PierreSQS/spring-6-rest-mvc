@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvc.model.BeerOrderDTO;
 import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,6 +30,15 @@ public class BeerOrderServiceJPA implements BeerOrderService {
 
     @Override
     public Page<BeerOrderDTO> listOrders(Integer pageNumber, Integer pageSize) {
-        return null;
+        if (pageNumber == null) {
+            pageNumber = 0;
+        }
+
+        if (pageSize == null) {
+            pageSize = 25;
+        }
+
+        return beerOrderRepo.findAll(PageRequest.of(pageNumber, pageSize))
+                .map(beerOrderMapper::beerOrderToBeerOrderDto);
     }
 }
