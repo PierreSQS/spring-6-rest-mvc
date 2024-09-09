@@ -37,7 +37,7 @@ class BeerOrderControllerIT {
         mockMvc.perform(get(BEER_ORDER_PATH)
                         .with(BeerControllerTest.jwtRequestPostProcessor))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size", greaterThan(0)))
+                .andExpect(jsonPath("$.size()", greaterThan(0)))
                 .andDo(print());
     }
 
