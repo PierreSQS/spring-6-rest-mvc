@@ -22,7 +22,9 @@ public class BeerOrderController {
 
     @GetMapping(BEER_ORDER_PATH)
     public List<BeerOrderDTO> listBeerOrders() {
-        return null;
+        return beerOrderRepo.findAll().stream()
+                .map(beerOrderMapper::beerOrderToBeerOrderDto)
+                .toList();
     }
 
     @GetMapping(BEER_ORDER_PATH_ID)
