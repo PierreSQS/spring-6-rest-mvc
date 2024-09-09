@@ -51,7 +51,7 @@ class BeerOrderControllerIT {
         mockMvc.perform(get(BEER_ORDER_PATH_ID,firstFoundBeer.getId().toString())
                         .with(BeerControllerTest.jwtRequestPostProcessor))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",equalTo(firstFoundBeer.getId())))
+                .andExpect(jsonPath("$.id",equalTo(firstFoundBeer.getId().toString())))
                 .andDo(print());
     }
 }
