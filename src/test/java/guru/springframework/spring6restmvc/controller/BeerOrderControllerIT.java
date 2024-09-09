@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH;
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH_ID;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,7 +38,8 @@ class BeerOrderControllerIT {
         mockMvc.perform(get(BEER_ORDER_PATH)
                         .with(BeerControllerTest.jwtRequestPostProcessor))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", greaterThan(0)))
+                // 6 is the minimum amount of BeerOrders coming from the BootStrapLoader
+                .andExpect(jsonPath("$.size()", is(greaterThanOrEqualTo(6))))
                 .andDo(print());
     }
 
