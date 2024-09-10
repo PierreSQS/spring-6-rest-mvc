@@ -51,7 +51,7 @@ class BeerOrderControllerIT {
     ObjectMapper objectMapper;
 
     @Test
-    void createBeerOrders() throws Exception {
+    void createBeerOrder() throws Exception {
         // find an existing customer and set an order and orderlines on it
         Customer firstFoundCustomer = customerRepo.findAll().getFirst();
 
