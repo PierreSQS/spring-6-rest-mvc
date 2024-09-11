@@ -15,19 +15,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Set;
 
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH;
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH_ID;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,18 +67,13 @@ class BeerOrderControllerIT {
                                 .build()
                 )).build();
 
-        MvcResult mvcResult = mockMvc.perform(post(BEER_ORDER_PATH)
+        mockMvc.perform(post(BEER_ORDER_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerOrderCreateDTO))
                         .with(BeerControllerTest.jwtRequestPostProcessor))
                 .andExpect(status().isCreated())
-                .andDo(print())
-                .andReturn();
-
-        String location = mvcResult.getResponse().getHeader("Location");
-        String redirectedUrl = mvcResult.getResponse().getRedirectedUrl();
-
-        assertThat(location).isEqualTo(redirectedUrl);
+                .andExpect(header().exists("Location"))
+                .andDo(print());
 
     }
 
