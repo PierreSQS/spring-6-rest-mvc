@@ -7,7 +7,6 @@ import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.mappers.BeerOrderMapper;
 import guru.springframework.spring6restmvc.model.BeerOrderCreateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderDTO;
-import guru.springframework.spring6restmvc.model.BeerOrderLineDTO;
 import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
@@ -43,10 +42,19 @@ public class BeerOrderServiceJPA implements BeerOrderService {
         Set<BeerOrderLine> beerOrderLines = new HashSet<>();
 
         // set Beer and Quantity in BeerOrderLine to BeerOrder to create
-        toCreateBeerOrderDTO.getBeerOrderLineCreateDTOS().forEach(beerOrderLineCreateDTO -> {
-        });
+        toCreateBeerOrderDTO.getBeerOrderLineCreateDTOS().forEach(beerOrderLineCreateDTO ->
+                beerOrderLines.add(BeerOrderLine.builder()
+                        .beer(beerRepo.findById(beerOrderLineCreateDTO.getBeerID())
+                                .orElseThrow(NotFoundException::new))
+                        .orderQuantity(beerOrderLineCreateDTO.getOrderQuantity())
+                        .build()));
 
-        return null;
+        // save  the new BeerOrder
+        return beerOrderRepo.save(BeerOrder.builder()
+                .customer(customer)
+                .beerOrderLines(beerOrderLines)
+                .customerRef(toCreateBeerOrderDTO.getCustomerRef())
+                .build());
     }
 
     @Override

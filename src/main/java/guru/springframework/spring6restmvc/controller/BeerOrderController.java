@@ -32,7 +32,7 @@ public class BeerOrderController {
         BeerOrder savedBeerOrder = beerOrderServ.saveBeerOrder(toCreateBeerOrderDTO);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Location",BEER_ORDER_PATH + savedBeerOrder.getId());
+        httpHeaders.add("Location",BEER_ORDER_PATH + "/" + savedBeerOrder.getId());
 
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
