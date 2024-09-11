@@ -77,7 +77,9 @@ class BeerOrderControllerIT {
                 .andReturn();
 
         String location = mvcResult.getResponse().getHeader("Location");
-        assertThat(location).isNotEmpty();
+        String redirectedUrl = mvcResult.getResponse().getRedirectedUrl();
+
+        assertThat(location).isEqualTo(redirectedUrl);
 
     }
 
