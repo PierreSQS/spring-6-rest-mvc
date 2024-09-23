@@ -7,6 +7,7 @@ import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.model.BeerOrderCreateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderLineCreateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderLineUpdateDTO;
+import guru.springframework.spring6restmvc.model.BeerOrderShipmentUpdateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderUpdateDTO;
 import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
@@ -75,6 +76,9 @@ class BeerOrderControllerIT {
                 .customerID(firstFoundBeerOrder.getId())
                 .customerRef("Test Customer Ref")
                 .beerOrderLineUpdateDTOs(updateBeerOrderLinesDTOs)
+                .beerOrderShipmentUpdateDTO(BeerOrderShipmentUpdateDTO.builder()
+                        .trackingNumber("123456")
+                        .build())
                 .build();
 
         mockMvc.perform(put(BEER_ORDER_PATH_ID,firstFoundBeerOrder.getId())
