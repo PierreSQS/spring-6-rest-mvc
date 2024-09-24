@@ -75,7 +75,7 @@ class BeerOrderControllerIT {
         );
 
         val beerOrderUpdateDTO = BeerOrderUpdateDTO.builder()
-                .customerID(firstFoundBeerOrder.getId())
+                .customerID(firstFoundBeerOrder.getCustomer().getId())
                 .customerRef("Test Customer Ref")
                 .beerOrderLineUpdateDTOs(updateBeerOrderLinesDTOs)
                 .beerOrderShipmentUpdateDTO(BeerOrderShipmentUpdateDTO.builder()
