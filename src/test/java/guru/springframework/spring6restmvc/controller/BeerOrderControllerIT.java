@@ -26,9 +26,11 @@ import java.util.Set;
 
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH;
 import static guru.springframework.spring6restmvc.controller.BeerOrderController.BEER_ORDER_PATH_ID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -55,6 +57,20 @@ class BeerOrderControllerIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Test
+    void deleteBeerOrder() throws Exception {
+        // find an existing BeerOrder (the first one in this case)
+        BeerOrder firstFoundBeerOrder = beerOrderRepo.findAll().getFirst();
+
+        // delete it
+        mockMvc.perform(delete(BEER_ORDER_PATH_ID, firstFoundBeerOrder.getId())
+                        .with(BeerControllerTest.jwtRequestPostProcessor))
+                .andExpect(status().isOk());
+
+        assertThat(beerOrderRepo.findById(firstFoundBeerOrder.getId())).isEmpty();
+
+    }
 
     @Transactional
     @Test
