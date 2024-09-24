@@ -41,7 +41,7 @@ public class BeerOrderServiceJPA implements BeerOrderService {
         val beerOrderToUpdate = beerOrderRepo.findById(beerOrderID).orElseThrow(NotFoundException::new);
 
         // if customer exists in Update DTO then update customer in found BeerOrder
-        beerOrderToUpdate.setCustomer(customerRepo.findById(beerOrderID).orElseThrow(NotFoundException::new));
+        beerOrderToUpdate.setCustomer(customerRepo.findById(beerOrderUpdateDTO.getCustomerID()).orElseThrow(NotFoundException::new));
 
         // and update customerRef
         beerOrderToUpdate.setCustomerRef(beerOrderUpdateDTO.getCustomerRef());
@@ -52,8 +52,8 @@ public class BeerOrderServiceJPA implements BeerOrderService {
             if (beerOrderLineUpdateDTO.getBeerID() != null) {
                 // find the BeerOrderLines in BeerOrder to Update that match with Lines in Update Order
                 val foundBeerOrderLine = beerOrderToUpdate.getBeerOrderLines().stream()
-                        .filter(beerOrderLineToUpdate ->
-                                beerOrderLineToUpdate.getId().equals(beerOrderLineUpdateDTO.getId()))
+                        .filter(filteredLine ->
+                                filteredLine.getId().equals(beerOrderLineUpdateDTO.getId()))
                         .findFirst().orElseThrow(NotFoundException::new);
 
                 // update the Beer Details in found Orderline
@@ -73,12 +73,10 @@ public class BeerOrderServiceJPA implements BeerOrderService {
         });
 
         // if shipment present in Update BeerOrder
-
-        if (beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO() != null) {
-            String trackingNumber = beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO().getTrackingNumber();
-            if (trackingNumber != null) {
+        if (beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO() != null && beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO().getTrackingNumber() != null) {
+            if (beerOrderToUpdate.getBeerOrderShipment() != null) {
                 // if tracking present in BeerOrder to Update, update tracking Number
-                beerOrderToUpdate.getBeerOrderShipment().setTrackingNumber(trackingNumber);
+                beerOrderToUpdate.getBeerOrderShipment().setTrackingNumber(beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO().getTrackingNumber());
             } else {
                 // add the new tracking number
                 beerOrderToUpdate.setBeerOrderShipment(BeerOrderShipment.builder()
@@ -87,7 +85,8 @@ public class BeerOrderServiceJPA implements BeerOrderService {
             }
         }
 
-        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderToUpdate);
+        // and save the updated BeerOrder
+        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderRepo.save(beerOrderToUpdate));
     }
 
     @Override
