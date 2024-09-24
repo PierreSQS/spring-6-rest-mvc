@@ -36,6 +36,13 @@ public class BeerOrderServiceJPA implements BeerOrderService {
     private final BeerRepository beerRepo;
 
     @Override
+    public void deleteBeerOrder(UUID beerOrderID) {
+        BeerOrder beerOrderToDelete = beerOrderRepo.findById(beerOrderID).orElseThrow(NotFoundException::new);
+
+        beerOrderRepo.deleteById(beerOrderToDelete.getId());
+    }
+
+    @Override
     public BeerOrderDTO updateBeerOrder(UUID beerOrderID, BeerOrderUpdateDTO beerOrderUpdateDTO) {
         // find the order to update
         val beerOrderToUpdate = beerOrderRepo.findById(beerOrderID).orElseThrow(NotFoundException::new);

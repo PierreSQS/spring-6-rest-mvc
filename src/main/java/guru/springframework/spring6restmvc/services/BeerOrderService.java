@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot on 10-09-2024.
+ * Modified by Pierrot on 24-09-2024.
  */
 public interface BeerOrderService {
 
@@ -22,4 +22,6 @@ public interface BeerOrderService {
     BeerOrder saveBeerOrder(BeerOrderCreateDTO toCreateBeerOrderDTO);
 
     BeerOrderDTO updateBeerOrder(UUID beerOrderID, BeerOrderUpdateDTO beerOrderUpdateDTO);
+
+    void deleteBeerOrder(UUID beerOrderID);
 }

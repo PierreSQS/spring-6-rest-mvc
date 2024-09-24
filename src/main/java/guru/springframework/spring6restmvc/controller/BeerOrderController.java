@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,14 @@ public class BeerOrderController {
 
     private final BeerOrderService beerOrderServ;
 
-    @PutMapping(BEER_ORDER_PATH_ID) public ResponseEntity<BeerOrderDTO> updateBeerOrder(@PathVariable UUID beerOrderID,
+    @DeleteMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<Void> deleteBeerOrder(@PathVariable UUID beerOrderID) {
+        beerOrderServ.deleteBeerOrder(beerOrderID);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(BEER_ORDER_PATH_ID)
+    public ResponseEntity<BeerOrderDTO> updateBeerOrder(@PathVariable UUID beerOrderID,
                                                         @RequestBody BeerOrderUpdateDTO beerOrderUpdateDTO) {
         return ResponseEntity.ok(beerOrderServ.updateBeerOrder(beerOrderID, beerOrderUpdateDTO));
     }
