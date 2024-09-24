@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controller;
 import guru.springframework.spring6restmvc.entities.BeerOrder;
 import guru.springframework.spring6restmvc.model.BeerOrderCreateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderDTO;
+import guru.springframework.spring6restmvc.model.BeerOrderUpdateDTO;
 import guru.springframework.spring6restmvc.services.BeerOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,11 @@ public class BeerOrderController {
     public static final String BEER_ORDER_PATH_ID = BEER_ORDER_PATH + "/{beerOrderID}";
 
     private final BeerOrderService beerOrderServ;
+
+    @PutMapping(BEER_ORDER_PATH_ID) public ResponseEntity<BeerOrderDTO> updateBeerOrder(@PathVariable UUID beerOrderID,
+                                                        @RequestBody BeerOrderUpdateDTO beerOrderUpdateDTO) {
+        return ResponseEntity.ok(beerOrderServ.updateBeerOrder(beerOrderID, beerOrderUpdateDTO));
+    }
 
     @PostMapping(BEER_ORDER_PATH)
     public ResponseEntity<HttpHeaders> createBeerOrder(@Validated @RequestBody BeerOrderCreateDTO toCreateBeerOrderDTO) {

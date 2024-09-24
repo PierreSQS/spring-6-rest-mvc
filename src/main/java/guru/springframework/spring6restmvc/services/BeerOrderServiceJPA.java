@@ -7,10 +7,12 @@ import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.mappers.BeerOrderMapper;
 import guru.springframework.spring6restmvc.model.BeerOrderCreateDTO;
 import guru.springframework.spring6restmvc.model.BeerOrderDTO;
+import guru.springframework.spring6restmvc.model.BeerOrderUpdateDTO;
 import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,30 @@ public class BeerOrderServiceJPA implements BeerOrderService {
     private final BeerOrderMapper beerOrderMapper;
     private final CustomerRepository customerRepo;
     private final BeerRepository beerRepo;
+
+    @Override
+    public BeerOrderDTO updateBeerOrder(UUID beerOrderID, BeerOrderUpdateDTO beerOrderUpdateDTO) {
+        // find the order to update
+        val beerOrderToUpdate = beerOrderRepo.findById(beerOrderID).orElseThrow(NotFoundException::new);
+
+        // if customer exists in Update DTO then update customer in found BeerOrder
+        beerOrderToUpdate.setCustomer(customerRepo.findById(beerOrderID).orElseThrow(NotFoundException::new));
+
+        // and update customerRef
+        beerOrderToUpdate.setCustomerRef(beerOrderUpdateDTO.getCustomerRef());
+
+        // if BeerOrder lines present in Update DTO, the update them in found BeerOrder
+        beerOrderUpdateDTO.getBeerOrderLineUpdateDTOs().forEach(beerOrderLineUpdateDTO -> {
+            // if Beer present in BeerOrderLine then update Beer Details in OrderLine
+            if (beerOrderLineUpdateDTO.getBeerID() != null) {
+
+            } else {
+
+            }
+        });
+
+        return null;
+    }
 
     @Override
     public BeerOrder saveBeerOrder(BeerOrderCreateDTO toCreateBeerOrderDTO) {
