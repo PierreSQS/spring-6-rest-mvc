@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.services;
 import guru.springframework.spring6restmvc.controller.NotFoundException;
 import guru.springframework.spring6restmvc.entities.BeerOrder;
 import guru.springframework.spring6restmvc.entities.BeerOrderLine;
+import guru.springframework.spring6restmvc.entities.BeerOrderShipment;
 import guru.springframework.spring6restmvc.entities.Customer;
 import guru.springframework.spring6restmvc.mappers.BeerOrderMapper;
 import guru.springframework.spring6restmvc.model.BeerOrderCreateDTO;
@@ -49,13 +50,44 @@ public class BeerOrderServiceJPA implements BeerOrderService {
         beerOrderUpdateDTO.getBeerOrderLineUpdateDTOs().forEach(beerOrderLineUpdateDTO -> {
             // if Beer present in BeerOrderLine then update Beer Details in OrderLine
             if (beerOrderLineUpdateDTO.getBeerID() != null) {
+                // find the BeerOrderLines in BeerOrder to Update that match with Lines in Update Order
+                val foundBeerOrderLine = beerOrderToUpdate.getBeerOrderLines().stream()
+                        .filter(beerOrderLineToUpdate ->
+                                beerOrderLineToUpdate.getId().equals(beerOrderLineUpdateDTO.getId()))
+                        .findFirst().orElseThrow(NotFoundException::new);
+
+                // update the Beer Details in found Orderline
+                foundBeerOrderLine.setBeer(beerRepo.findById(beerOrderLineUpdateDTO.getBeerID())
+                        .orElseThrow(NotFoundException::new));
+                foundBeerOrderLine.setOrderQuantity(beerOrderLineUpdateDTO.getOrderQuantity());
+                foundBeerOrderLine.setQuantityAllocated(beerOrderLineUpdateDTO.getQuantityAllocated());
 
             } else {
-
+                // add the new BeerOrder Line
+                beerOrderToUpdate.getBeerOrderLines().add(BeerOrderLine.builder()
+                        .beer(beerRepo.findById(beerOrderLineUpdateDTO.getBeerID()).orElseThrow(NotFoundException::new))
+                        .orderQuantity(beerOrderLineUpdateDTO.getOrderQuantity())
+                        .quantityAllocated(beerOrderLineUpdateDTO.getQuantityAllocated())
+                        .build());
             }
         });
 
-        return null;
+        // if shipment present in Update BeerOrder
+
+        if (beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO() != null) {
+            String trackingNumber = beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO().getTrackingNumber();
+            if (trackingNumber != null) {
+                // if tracking present in BeerOrder to Update, update tracking Number
+                beerOrderToUpdate.getBeerOrderShipment().setTrackingNumber(trackingNumber);
+            } else {
+                // add the new tracking number
+                beerOrderToUpdate.setBeerOrderShipment(BeerOrderShipment.builder()
+                        .trackingNumber(beerOrderUpdateDTO.getBeerOrderShipmentUpdateDTO().getTrackingNumber())
+                        .build());
+            }
+        }
+
+        return beerOrderMapper.beerOrderToBeerOrderDto(beerOrderToUpdate);
     }
 
     @Override
