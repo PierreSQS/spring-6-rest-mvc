@@ -57,6 +57,7 @@ class BeerControllerRestAssuredTest {
 
     @Test
     void testListBeers() {
+
         given().contentType(ContentType.JSON)
                 .when()
                 .filter(filter)

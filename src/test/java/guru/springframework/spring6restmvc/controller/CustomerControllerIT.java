@@ -98,6 +98,7 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void testListAllEmptyList() {
+
         customerRepository.deleteAll();
         List<CustomerDTO> dtos = customerController.listAllCustomers();
 

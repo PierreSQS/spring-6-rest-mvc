@@ -374,6 +374,7 @@ class BeerControllerIT {
     @Transactional
     @Test
     void testEmptyList() {
+
         beerRepository.deleteAll();
         Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 25);
 
