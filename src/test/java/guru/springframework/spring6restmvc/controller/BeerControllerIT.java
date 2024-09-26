@@ -9,6 +9,7 @@ import guru.springframework.spring6restmvc.events.BeerUpdatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
+import guru.springframework.spring6restmvc.repositories.BeerOrderRepository;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import lombok.val;
 import org.hamcrest.core.IsNull;
@@ -57,6 +58,9 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     @Autowired
     BeerMapper beerMapper;
@@ -142,9 +146,16 @@ class BeerControllerIT {
 
     @Test
     void deleteByIdFoundMVC() throws Exception {
-        Beer beer = beerRepository.findAll().getFirst();
+        // to avoid constraint integrity violation,
+        // we create and save a New Beer then delete it
+        Beer beerToDelete = beerRepository.save(Beer.builder()
+                .beerName("Beer To Delete")
+                .upc("123456")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .price(BigDecimal.TEN)
+                .build());
 
-        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beerToDelete.getId())
                         .with(BeerControllerTest.jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -374,6 +385,8 @@ class BeerControllerIT {
     @Transactional
     @Test
     void testEmptyList() {
+        // to avoid constraint integrity violation
+        beerOrderRepository.deleteAll();
 
         beerRepository.deleteAll();
         Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 25);
