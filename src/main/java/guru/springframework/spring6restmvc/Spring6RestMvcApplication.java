@@ -9,7 +9,7 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 
 @EnableCaching
 @SpringBootApplication
-//@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 public class Spring6RestMvcApplication {
 
     public static void main(String[] args) {
