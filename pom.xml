@@ -95,6 +95,25 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.oai</groupId>
+            <artifactId>swagger-request-validator-restassured</artifactId>
+            <version>2.42.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- added extra to avoid the following dependency issue
+             Could not find artifact com.github.java-json-tools:jackson-coreutils:pom:2.0-SNAPSHOT
+             in maven_central (https://repo.maven.apache.org/maven2/) -->
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>jackson-coreutils</artifactId>
+            <version>2.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -191,6 +210,11 @@
             <id>maven_central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <!-- for  com.github.java-json-tools.jackson-coreutils:jackson-coreutils:pom:2.0 issue -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
