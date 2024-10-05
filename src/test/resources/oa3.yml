@@ -24,7 +24,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: "#/components/schemas/CustomerDTO"
     put:
       tags:
       - customer-controller
@@ -40,15 +40,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerDTO'
+              $ref: "#/components/schemas/CustomerDTO"
         required: true
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
     delete:
       tags:
       - customer-controller
@@ -63,10 +59,6 @@ paths:
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
     patch:
       tags:
       - customer-controller
@@ -82,7 +74,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerDTO'
+              $ref: "#/components/schemas/CustomerDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /api/v1/beerorder/{beerOrderID}:
+    get:
+      tags:
+      - beer-order-controller
+      operationId: getBeerOrderByID
+      parameters:
+      - name: beerOrderID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BeerOrderDTO"
+    put:
+      tags:
+      - beer-order-controller
+      operationId: updateBeerOrder
+      parameters:
+      - name: beerOrderID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BeerOrderUpdateDTO"
         required: true
       responses:
         "200":
@@ -90,7 +121,21 @@ paths:
           content:
             '*/*':
               schema:
-                type: string
+                $ref: "#/components/schemas/BeerOrderDTO"
+    delete:
+      tags:
+      - beer-order-controller
+      operationId: deleteBeerOrder
+      parameters:
+      - name: beerOrderID
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
   /api/v1/beer/{beerId}:
     get:
       tags:
@@ -109,7 +154,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/BeerDTO'
+                $ref: "#/components/schemas/BeerDTO"
     put:
       tags:
       - beer-controller
@@ -125,15 +170,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BeerDTO'
+              $ref: "#/components/schemas/BeerDTO"
         required: true
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
     delete:
       tags:
       - beer-controller
@@ -148,10 +189,6 @@ paths:
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
     patch:
       tags:
       - beer-controller
@@ -167,15 +204,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BeerDTO'
+              $ref: "#/components/schemas/BeerDTO"
         required: true
       responses:
         "200":
           description: OK
-          content:
-            '*/*':
-              schema:
-                type: string
   /api/v1/customer:
     get:
       tags:
@@ -189,7 +222,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CustomerDTO'
+                  $ref: "#/components/schemas/CustomerDTO"
     post:
       tags:
       - customer-controller
@@ -198,7 +231,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerDTO'
+              $ref: "#/components/schemas/CustomerDTO"
         required: true
       responses:
         "200":
@@ -206,7 +239,49 @@ paths:
           content:
             '*/*':
               schema:
-                type: string
+                $ref: "#/components/schemas/HttpHeaders"
+  /api/v1/beerorder:
+    get:
+      tags:
+      - beer-order-controller
+      operationId: listBeerOrders
+      parameters:
+      - name: pageNumber
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelBeerOrderDTO"
+    post:
+      tags:
+      - beer-order-controller
+      operationId: createBeerOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BeerOrderCreateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/HttpHeaders"
   /api/v1/beer:
     get:
       tags:
@@ -257,7 +332,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/PageBeerDTO'
+                $ref: "#/components/schemas/PagedModelBeerDTO"
     post:
       tags:
       - beer-controller
@@ -266,7 +341,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BeerDTO'
+              $ref: "#/components/schemas/BeerDTO"
         required: true
       responses:
         "200":
@@ -274,7 +349,7 @@ paths:
           content:
             '*/*':
               schema:
-                type: string
+                $ref: "#/components/schemas/HttpHeaders"
 components:
   schemas:
     CustomerDTO:
@@ -294,6 +369,48 @@ components:
         updateDate:
           type: string
           format: date-time
+    BeerOrderLineUpdateDTO:
+      required:
+      - beerID
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        beerID:
+          type: string
+          format: uuid
+        orderQuantity:
+          minimum: 1
+          type: integer
+          format: int32
+        quantityAllocated:
+          type: integer
+          format: int32
+    BeerOrderShipmentUpdateDTO:
+      required:
+      - trackingNumber
+      type: object
+      properties:
+        trackingNumber:
+          type: string
+    BeerOrderUpdateDTO:
+      required:
+      - customerID
+      type: object
+      properties:
+        customerRef:
+          type: string
+        customerID:
+          type: string
+          format: uuid
+        beerOrderLineUpdateDTOs:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/BeerOrderLineUpdateDTO"
+        beerOrderShipmentUpdateDTO:
+          $ref: "#/components/schemas/BeerOrderShipmentUpdateDTO"
     BeerDTO:
       required:
       - beerName
@@ -336,62 +453,446 @@ components:
         updateDate:
           type: string
           format: date-time
-    PageBeerDTO:
+    BeerOrderDTO:
       type: object
       properties:
-        totalPages:
+        id:
+          type: string
+          format: uuid
+        version:
           type: integer
           format: int32
+        customerRef:
+          type: string
+        customer:
+          $ref: "#/components/schemas/CustomerDTO"
+        beerOrderLinesDTO:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/BeerOrderLineDTO"
+        beerOrderShipmentDTO:
+          $ref: "#/components/schemas/BeerOrderShipmentDTO"
+        createdDate:
+          type: string
+          format: date-time
+        lastModifiedDate:
+          type: string
+          format: date-time
+    BeerOrderLineDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        version:
+          type: integer
+          format: int64
+        createdDate:
+          type: string
+          format: date-time
+        lastModifiedDate:
+          type: string
+          format: date-time
+        beer:
+          $ref: "#/components/schemas/BeerDTO"
+        orderQuantity:
+          minimum: 1
+          type: integer
+          format: int32
+        quantityAllocated:
+          type: integer
+          format: int32
+    BeerOrderShipmentDTO:
+      required:
+      - trackingNumber
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        version:
+          type: integer
+          format: int64
+        trackingNumber:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
+        lastModifiedDate:
+          type: string
+          format: date-time
+    ContentDisposition:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        filename:
+          type: string
+        charset:
+          type: string
+        size:
+          type: integer
+          format: int64
+          deprecated: true
+        creationDate:
+          type: string
+          format: date-time
+          deprecated: true
+        modificationDate:
+          type: string
+          format: date-time
+          deprecated: true
+        readDate:
+          type: string
+          format: date-time
+          deprecated: true
+        inline:
+          type: boolean
+        attachment:
+          type: boolean
+        formData:
+          type: boolean
+    HttpHeaders:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        location:
+          type: string
+          format: uri
+        host:
+          type: object
+          properties:
+            address:
+              type: object
+              properties:
+                hostAddress:
+                  type: string
+                address:
+                  type: string
+                  format: byte
+                hostName:
+                  type: string
+                linkLocalAddress:
+                  type: boolean
+                multicastAddress:
+                  type: boolean
+                anyLocalAddress:
+                  type: boolean
+                loopbackAddress:
+                  type: boolean
+                siteLocalAddress:
+                  type: boolean
+                mcglobal:
+                  type: boolean
+                mcnodeLocal:
+                  type: boolean
+                mclinkLocal:
+                  type: boolean
+                mcsiteLocal:
+                  type: boolean
+                mcorgLocal:
+                  type: boolean
+                canonicalHostName:
+                  type: string
+            port:
+              type: integer
+              format: int32
+            unresolved:
+              type: boolean
+            hostName:
+              type: string
+            hostString:
+              type: string
+        all:
+          type: object
+          additionalProperties:
+            type: string
+          writeOnly: true
+        lastModified:
+          type: integer
+          format: int64
+        date:
+          type: integer
+          format: int64
+        contentLength:
+          type: integer
+          format: int64
+        contentDisposition:
+          $ref: "#/components/schemas/ContentDisposition"
+        allow:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpMethod"
+        cacheControl:
+          type: string
+        contentLanguage:
+          type: object
+          properties:
+            language:
+              type: string
+            displayName:
+              type: string
+            country:
+              type: string
+            variant:
+              type: string
+            script:
+              type: string
+            unicodeLocaleAttributes:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            unicodeLocaleKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            displayLanguage:
+              type: string
+            displayScript:
+              type: string
+            displayCountry:
+              type: string
+            displayVariant:
+              type: string
+            extensionKeys:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+            iso3Language:
+              type: string
+            iso3Country:
+              type: string
+        accessControlRequestHeaders:
+          type: array
+          items:
+            type: string
+        accessControlRequestMethod:
+          $ref: "#/components/schemas/HttpMethod"
+        accessControlAllowMethods:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpMethod"
+        accessControlExposeHeaders:
+          type: array
+          items:
+            type: string
+        accessControlAllowCredentials:
+          type: boolean
+        accessControlAllowHeaders:
+          type: array
+          items:
+            type: string
+        accessControlAllowOrigin:
+          type: string
+        accept:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaType"
+        etag:
+          type: string
+        acceptLanguage:
+          type: array
+          items:
+            type: object
+            properties:
+              range:
+                type: string
+              weight:
+                type: number
+                format: double
+        acceptPatch:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaType"
+        basicAuth:
+          type: string
+          writeOnly: true
+        ifNoneMatch:
+          type: array
+          items:
+            type: string
+        bearerAuth:
+          type: string
+          writeOnly: true
+        connection:
+          type: array
+          items:
+            type: string
+        acceptCharset:
+          type: array
+          items:
+            type: string
+        vary:
+          type: array
+          items:
+            type: string
+        upgrade:
+          type: string
+        pragma:
+          type: string
+        ifMatch:
+          type: array
+          items:
+            type: string
+        expires:
+          type: integer
+          format: int64
+        range:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpRange"
+        origin:
+          type: string
+        contentType:
+          $ref: "#/components/schemas/MediaType"
+        ifModifiedSince:
+          type: integer
+          format: int64
+        accessControlMaxAge:
+          type: integer
+          format: int64
+        acceptLanguageAsLocales:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+              displayName:
+                type: string
+              country:
+                type: string
+              variant:
+                type: string
+              script:
+                type: string
+              unicodeLocaleAttributes:
+                uniqueItems: true
+                type: array
+                items:
+                  type: string
+              unicodeLocaleKeys:
+                uniqueItems: true
+                type: array
+                items:
+                  type: string
+              displayLanguage:
+                type: string
+              displayScript:
+                type: string
+              displayCountry:
+                type: string
+              displayVariant:
+                type: string
+              extensionKeys:
+                uniqueItems: true
+                type: array
+                items:
+                  type: string
+              iso3Language:
+                type: string
+              iso3Country:
+                type: string
+        ifUnmodifiedSince:
+          type: integer
+          format: int64
+      additionalProperties:
+        type: array
+        items:
+          type: string
+    HttpMethod:
+      type: object
+    HttpRange:
+      type: object
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        qualityValue:
+          type: number
+          format: double
+        wildcardSubtype:
+          type: boolean
+        wildcardType:
+          type: boolean
+        charset:
+          type: string
+        concrete:
+          type: boolean
+        subtypeSuffix:
+          type: string
+    BeerOrderCreateDTO:
+      required:
+      - customerID
+      type: object
+      properties:
+        customerRef:
+          type: string
+        customerID:
+          type: string
+          format: uuid
+        beerOrderLineCreateDTOS:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/BeerOrderLineCreateDTO"
+    BeerOrderLineCreateDTO:
+      required:
+      - beerID
+      type: object
+      properties:
+        beerID:
+          type: string
+          format: uuid
+        orderQuantity:
+          minimum: 1
+          type: integer
+          format: int32
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
         totalElements:
           type: integer
           format: int64
-        first:
-          type: boolean
-        last:
-          type: boolean
-        size:
+        totalPages:
           type: integer
-          format: int32
+          format: int64
+    PagedModelBeerOrderDTO:
+      type: object
+      properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/BeerDTO'
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        numberOfElements:
-          type: integer
-          format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
-        empty:
-          type: boolean
-    PageableObject:
+            $ref: "#/components/schemas/BeerOrderDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    PagedModelBeerDTO:
       type: object
       properties:
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        paged:
-          type: boolean
-        unpaged:
-          type: boolean
-    SortObject:
-      type: object
-      properties:
-        empty:
-          type: boolean
-        sorted:
-          type: boolean
-        unsorted:
-          type: boolean
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/BeerDTO"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
