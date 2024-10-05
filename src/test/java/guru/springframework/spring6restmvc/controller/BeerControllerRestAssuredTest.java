@@ -1,5 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
+import com.atlassian.oai.validator.OpenApiInteractionValidator;
+import com.atlassian.oai.validator.restassured.OpenApiValidationFilter;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,8 +49,13 @@ class BeerControllerRestAssuredTest {
 
     @Test
     void testListBeers() {
+        OpenApiValidationFilter openApiValidationFilter = new OpenApiValidationFilter(OpenApiInteractionValidator
+                .createForSpecificationUrl("oa3.yml")
+                .build());
+
         given().contentType(ContentType.JSON)
                 .when()
+                .filter(openApiValidationFilter)
                 .get("/api/v1/beer")
                 .then()
                 .assertThat().statusCode(200);
