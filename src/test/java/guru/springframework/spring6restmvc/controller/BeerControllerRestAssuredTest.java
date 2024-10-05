@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.controller;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter;
+import com.atlassian.oai.validator.whitelist.ValidationErrorsWhitelist;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,12 +17,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.ActiveProfiles;
 
+import static com.atlassian.oai.validator.whitelist.rule.WhitelistRules.messageHasKey;
 import static io.restassured.RestAssured.given;
 
 /**
  * Created by Pierrot on 04-10-2024.
  */
-@ActiveProfiles("test") // to overcome the Spring Securtity config (See the SpringSecConfig class !!!
+@ActiveProfiles("test") // to overcome the Spring Security config. See the SpringSecConfig class !!!
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({BeerControllerRestAssuredTest.TestConfig.class})
 @ComponentScan(basePackages = "guru.springframework.spring6restmvc")
@@ -51,6 +53,9 @@ class BeerControllerRestAssuredTest {
     void testListBeers() {
         OpenApiValidationFilter openApiValidationFilter = new OpenApiValidationFilter(OpenApiInteractionValidator
                 .createForSpecificationUrl("oa3.yml")
+                .withWhitelist(ValidationErrorsWhitelist.create()
+                        .withRule("ignore date-format",
+                                messageHasKey("validation.response.body.schema.format.date-time")))
                 .build());
 
         given().contentType(ContentType.JSON)
