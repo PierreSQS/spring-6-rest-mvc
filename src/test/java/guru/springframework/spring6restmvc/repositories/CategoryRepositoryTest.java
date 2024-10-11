@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 class CategoryRepositoryTest {
@@ -21,7 +21,7 @@ class CategoryRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testBeer = beerRepository.findAll().get(0);
+        testBeer = beerRepository.findAll().getFirst();
     }
 
     @Transactional
@@ -35,6 +35,8 @@ class CategoryRepositoryTest {
         Beer saveBeer = beerRepository.save(testBeer);
 
         System.out.println(saveBeer.getBeerName());
+
+        assertThat(savedCat.getId()).isNotNull();
 
     }
 }

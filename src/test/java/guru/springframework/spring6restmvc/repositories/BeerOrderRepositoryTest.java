@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @SpringBootTest
 class BeerOrderRepositoryTest {
 
@@ -27,8 +29,8 @@ class BeerOrderRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        testCustomer = customerRepository.findAll().get(0);
-        testBeer = beerRepository.findAll().get(0);
+        testCustomer = customerRepository.findAll().getFirst();
+        testBeer = beerRepository.findAll().getFirst();
     }
 
     @Transactional
@@ -46,6 +48,8 @@ class BeerOrderRepositoryTest {
 
 
         System.out.println(savedBeerOrder.getCustomerRef());
+
+        assertThat(savedBeerOrder.getCustomerRef()).isEqualTo(beerOrder.getCustomerRef());
     }
 }
 
