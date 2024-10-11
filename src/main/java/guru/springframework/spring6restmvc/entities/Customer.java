@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Customer {
     @Id
-
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
     private String name;
