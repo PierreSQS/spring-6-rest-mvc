@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>guru.springframework</groupId>
@@ -20,6 +20,7 @@
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <spring-boot.run.profiles>localmysql</spring-boot.run.profiles>
         <jwt-uri>http://example.com:9090</jwt-uri>
+        <opencsv.version>5.9</opencsv.version>
     </properties>
     <dependencies>
         <dependency>
@@ -101,7 +102,7 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.9</version>
+            <version>${opencsv.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -126,6 +127,12 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- added extra to avoid the dependency issue -->
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>jackson-coreutils</artifactId>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>com.atlassian.oai</groupId>
@@ -185,7 +192,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
                 <configuration>
                     <source>21</source>
                     <target>21</target>
@@ -214,13 +220,10 @@
         </plugins>
     </build>
     <repositories>
+        <!-- added for the missing jackson-coreutils dependency -->
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
     <pluginRepositories>
