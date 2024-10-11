@@ -21,16 +21,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt on 2019-01-26.
+ * Modified by Pierrot on 2024-10-11.
  */
 @Getter
 @Setter
@@ -41,11 +40,6 @@ import java.util.UUID;
 public class BeerOrderLine {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
@@ -55,10 +49,10 @@ public class BeerOrderLine {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    private Timestamp lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     public boolean isNew() {
         return this.id == null;

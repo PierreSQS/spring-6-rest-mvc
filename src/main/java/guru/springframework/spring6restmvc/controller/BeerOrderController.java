@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.UUID;
 
-;
-
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2024-10-11.
  */
 @RestController
 @RequiredArgsConstructor
