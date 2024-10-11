@@ -15,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +38,7 @@ public class BootstrapData implements CommandLineRunner {
     private final CustomerRepository customerRepository;
     private final BeerCsvService beerCsvService;
     private final BeerOrderRepository beerOrderRepository;
+    private final ResourceLoader resourceLoader;
 
     @Transactional
     @Override
@@ -96,11 +97,11 @@ public class BootstrapData implements CommandLineRunner {
 
     }
 
-    private void loadCsvData() throws FileNotFoundException {
+    private void loadCsvData() throws IOException {
         if (beerRepository.count() < 10){
-            File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
+            Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
 
-            List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
+            List<BeerCSVRecord> recs = beerCsvService.convertCSV(resource.getFile());
 
             recs.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
