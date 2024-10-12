@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, on 2024-10-12.
  */
 @Profile("!test")
 @Configuration
@@ -28,13 +28,15 @@ public class SpringSecConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/v3/api-docs**", "/swagger-ui/**",  "/swagger-ui.html").permitAll()
-                      .anyRequest().authenticated();
-                })
-               .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> {
-                     httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults());
-                });
+        http.authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers(
+                                "/v3/api-docs**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html")
+                                .permitAll()
+          .anyRequest().authenticated())
+               .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
+                       httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
 
         return http.build();
     }

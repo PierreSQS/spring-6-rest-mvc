@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, on 2024-10-12.
  */
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class Beer {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @UuidGenerator(style = UuidGenerator.Style.AUTO)
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
@@ -75,7 +75,7 @@ public class Beer {
 
     public void removeCategory(Category category){
         this.categories.remove(category);
-        category.getBeers().remove(category);
+        category.getBeers().remove(this);
     }
 
     @CreationTimestamp
