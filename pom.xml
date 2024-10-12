@@ -18,7 +18,7 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <logbook.version>3.9.0</logbook.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
-        <spring-boot.run.profiles>localmysql</spring-boot.run.profiles>
+        <spring-boot.run.profiles>awsmysql</spring-boot.run.profiles>
         <jwt-uri>http://example.com:9090</jwt-uri>
         <opencsv.version>5.9</opencsv.version>
     </properties>
@@ -174,7 +174,7 @@
                 <artifactId>springdoc-openapi-maven-plugin</artifactId>
                 <version>1.4</version>
                 <configuration>
-                    <apiDocsUrl>http://localhost:8081/v3/api-docs.yaml</apiDocsUrl>
+                    <apiDocsUrl>http://ec2-18-153-74-190.eu-central-1.compute.amazonaws.com:8081/v3/api-docs.yaml</apiDocsUrl>
                     <outputFileName>oa3.yml</outputFileName>
                 </configuration>
                 <executions>
