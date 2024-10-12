@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot, on 2024-10-12.
+ * Modified by Pierrot, on 2024-10-13.
  */
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class Customer {
     private UUID id;
     private String name;
 
-    @Column(length = 255)
+    @Column()
     private String email;
 
     @Version
