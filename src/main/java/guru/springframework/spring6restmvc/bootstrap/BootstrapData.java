@@ -20,7 +20,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot on 2024-10-11.
+ * Modified by Pierrot on 2024-10-12.
  */
 @Slf4j
 @Component
@@ -101,7 +103,8 @@ public class BootstrapData implements CommandLineRunner {
         if (beerRepository.count() < 10){
             Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
 
-            List<BeerCSVRecord> recs = beerCsvService.convertCSV(resource.getFile());
+            List<BeerCSVRecord> recs = beerCsvService.convertCSV(new BufferedReader(
+                    new InputStreamReader(resource.getInputStream())));
 
             recs.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
