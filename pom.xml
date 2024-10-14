@@ -56,19 +56,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-        <!-- Http-Request, Http-Response Logging -->
+        <!-- HTTP-REQUEST, HTTP-RESPONSE LOGGING -->
         <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>logbook-spring-boot-starter</artifactId>
             <version>${logbook.version}</version>
         </dependency>
-        <!-- JSON-Logging -->
+        <!-- JSON-LOGGING -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback-encoder.version}</version>
         </dependency>
-
+        <!-- ALLOWS LOGBOOK TO WORK WITH LOGSTASH BY CONFIGURATION -->
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-logstash</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
