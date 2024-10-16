@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
+import lombok.val;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +53,25 @@ class BeerControllerIT {
     @Autowired
     MockMvc mockMvc;
 
+    // will also trigger auditing !
+    @Test
+    void testCreateBeerMVC() throws Exception {
+        val beerDTO = BeerDTO.builder()
+                .beerName("New Beer")
+                .beerStyle(BeerStyle.IPA)
+                .upc("123123")
+                .price(BigDecimal.TEN)
+                .quantityOnHand(5)
+                .build();
+
+        mockMvc.perform(post(BeerController.BEER_PATH)
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isCreated())
+                .andReturn();
+    }
 
     @Disabled("just for demo purposes")
     @Test
