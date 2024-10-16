@@ -8,6 +8,7 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,8 +24,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2024-10-16.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
@@ -57,6 +59,7 @@ public class BootstrapData implements CommandLineRunner {
                     case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
                     case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
                     case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    case "Gose" -> BeerStyle.GOSE;
                     default -> BeerStyle.PILSNER;
                 };
 
@@ -68,6 +71,9 @@ public class BootstrapData implements CommandLineRunner {
                                 .quantityOnHand(beerCSVRecord.getCount())
                         .build());
             });
+
+            log.info("loaded {} Beers from CSV-File ", recs.size());
+            log.info("total Beers loaded: {}", beerRepository.count());
         }
     }
 
@@ -103,9 +109,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.save(beer1);
-            beerRepository.save(beer2);
-            beerRepository.save(beer3);
+            List<Beer> additionalBeers = List.of(beer1, beer2, beer3);
+            beerRepository.saveAll(additionalBeers);
+
+            log.info("loaded {} Beers manually", additionalBeers.size());
         }
 
     }
@@ -137,7 +144,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            List<Customer> customers = List.of(customer1, customer2, customer3);
+            customerRepository.saveAll(customers);
+
+            log.info("loaded {} Customers",customers.size());
         }
 
     }

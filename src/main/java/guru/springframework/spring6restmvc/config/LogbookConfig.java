@@ -8,15 +8,14 @@ import org.zalando.logbook.json.JsonHttpLogFormatter;
 import org.zalando.logbook.logstash.LogstashLogbackSink;
 
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2024-10-16.
  */
 @Configuration
 public class LogbookConfig {
 
     @Bean
-    public Sink LogbookLogStash(){
+    public Sink logbookLogStash(){
         HttpLogFormatter formatter = new JsonHttpLogFormatter();
-        LogstashLogbackSink sink = new LogstashLogbackSink(formatter);
-        return sink;
+        return new LogstashLogbackSink(formatter);
     }
 }
