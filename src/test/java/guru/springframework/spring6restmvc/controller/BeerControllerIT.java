@@ -2,6 +2,7 @@ package guru.springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.events.BeerCreatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
@@ -19,6 +20,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +38,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// TO ENABLE AUDITING TEST
+@RecordApplicationEvents
 @SpringBootTest
 @AutoConfigureMockMvc
 class BeerControllerIT {
+
+    @Autowired
+    ApplicationEvents applicationEvents;
+
     @Autowired
     BeerController beerController;
 
@@ -71,6 +80,12 @@ class BeerControllerIT {
                         .content(objectMapper.writeValueAsString(beerDTO)))
                 .andExpect(status().isCreated())
                 .andReturn();
+
+        // ASSERTION TO TEST THAT THE EVENT HAS BEEN PUBLISHED
+        assertThat(applicationEvents
+                .stream(BeerCreatedEvent.class)
+                .count())
+                .isEqualTo(1);
     }
 
     @Disabled("just for demo purposes")
