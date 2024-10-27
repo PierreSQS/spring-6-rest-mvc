@@ -8,13 +8,13 @@ import lombok.Setter;
 import org.springframework.security.core.Authentication;
 
 /**
- * Created by Pierrot on 2024-10-16.
+ * Created by Pierrot on 2024-10-27.
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
-public class BeerCreatedEvent {
+public class BeerCreatedEvent implements BeerEvent {
 
     private Beer beer;
 
