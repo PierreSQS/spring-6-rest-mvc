@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.events.BeerCreatedEvent;
 import guru.springframework.spring6restmvc.events.BeerDeletedEvent;
+import guru.springframework.spring6restmvc.events.BeerPatchedEvent;
 import guru.springframework.spring6restmvc.events.BeerUpdatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -87,8 +88,70 @@ class BeerControllerIT {
         assertThat(applicationEvents
                 .stream(BeerCreatedEvent.class)
                 .count())
-                .isEqualTo(1);
+                .isEqualTo(1L);
     }
+
+    @Test
+    void testUpdateBeer() throws Exception {
+        Beer beer = beerRepository.findAll().getFirst();
+
+        BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
+
+        beerDTO.setBeerName("Updated Name");
+
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // ASSERTION TO TEST THAT THE EVENT HAS BEEN PUBLISHED
+        assertThat(applicationEvents
+                .stream(BeerUpdatedEvent.class)
+                .count())
+                .isEqualTo(1L);
+    }
+
+    @Test
+    void testPatchBeerMvc() throws Exception {
+        Beer beer = beerRepository.findAll().getFirst();
+
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New Name");
+
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // ASSERTION TO TEST THAT THE EVENT HAS BEEN PUBLISHED
+        assertThat(applicationEvents
+                .stream(BeerPatchedEvent.class)
+                .count())
+                .isEqualTo(1L);
+    }
+
+    @Test
+    void deleteByIdFoundMVC() throws Exception {
+        Beer beer = beerRepository.findAll().getFirst();
+
+        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
+                        .with(BeerControllerTest.jwtRequestPostProcessor)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        // ASSERTION TO TEST THAT THE EVENT HAS BEEN PUBLISHED
+        assertThat(applicationEvents
+                .stream(BeerDeletedEvent.class)
+                .count())
+                .isEqualTo(1L);    }
 
     @Disabled("just for demo purposes")
     @Test
@@ -233,14 +296,7 @@ class BeerControllerIT {
         ResponseEntity<Void> responseEntity = beerController.deleteById(beer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        assertThat(beerRepository.findById(beer.getId())).isEmpty();
-
-        // ASSERT THAT EVENT HAS BEEN PUBLISHED!
-        assertThat(applicationEvents
-                .stream(BeerDeletedEvent.class)
-                .count())
-                .isEqualTo(1L);
-    }
+        assertThat(beerRepository.findById(beer.getId())).isEmpty();    }
 
     @Test
     void testUpdateNotFound() {
@@ -265,11 +321,6 @@ class BeerControllerIT {
 
         Beer updatedBeer = beerRepository.findById(beer.getId()).get();
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
-
-        // ASSERTION TO TEST THAT THE EVENT HAS BEEN PUBLISHED
-        assertThat(applicationEvents.stream(BeerUpdatedEvent.class)
-                .count())
-                .isEqualTo(1L);
     }
 
     @Rollback
