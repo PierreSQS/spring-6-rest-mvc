@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.events.BeerCreatedEvent;
+import guru.springframework.spring6restmvc.events.BeerDeletedEvent;
 import guru.springframework.spring6restmvc.events.BeerUpdatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -233,6 +234,12 @@ class BeerControllerIT {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         assertThat(beerRepository.findById(beer.getId())).isEmpty();
+
+        // ASSERT THAT EVENT HAS BEEN PUBLISHED!
+        assertThat(applicationEvents
+                .stream(BeerDeletedEvent.class)
+                .count())
+                .isEqualTo(1L);
     }
 
     @Test

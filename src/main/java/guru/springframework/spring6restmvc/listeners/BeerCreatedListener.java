@@ -53,7 +53,7 @@ public class BeerCreatedListener {
 
         val savedBeerAudit = beerAuditRepo.save(beerAudit);
 
-        log.debug("Beer Audit Event Created!");
+        log.debug("Beer Audit Event: {}!", eventType);
         log.debug("Beer created ID: {}",savedBeerAudit.getId().toString());
 
     }
