@@ -1,6 +1,10 @@
 package guru.springframework.spring6restmvc.listeners;
 
 import guru.springframework.spring6restmvc.events.BeerCreatedEvent;
+import guru.springframework.spring6restmvc.events.BeerDeletedEvent;
+import guru.springframework.spring6restmvc.events.BeerEvent;
+import guru.springframework.spring6restmvc.events.BeerPatchedEvent;
+import guru.springframework.spring6restmvc.events.BeerUpdatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.repositories.BeerAuditRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +28,25 @@ public class BeerCreatedListener {
 
     @Async // Marks the method as candidate for asynchronous execution
     @EventListener
-    public void listen(BeerCreatedEvent beerCreatedEvent) {
+    public void listen(BeerEvent beerEvent) {
         log.info("Current Thread Name: {}", Thread.currentThread().getName());
         log.info("Current Thread ID: {}", Thread.currentThread().threadId());
 
-        val beerAudit = beerMapper.beerToBeerAudit(beerCreatedEvent.getBeer());
-        beerAudit.setAuditEventType("BEER CREATED");
+        val beerAudit = beerMapper.beerToBeerAudit(beerEvent.getBeer());
 
-        Authentication authentication = beerCreatedEvent.getAuthentication();
+        String eventType;
+
+        switch (beerEvent) {
+            case BeerCreatedEvent ignored -> eventType = "BEER CREATED!";
+            case BeerUpdatedEvent ignored -> eventType = "BEER UPDATED!";
+            case BeerPatchedEvent ignored -> eventType = "BEER PATCHED!";
+            case BeerDeletedEvent ignored -> eventType = "BEER DELETED!";
+            default -> eventType = "UNKNOWN EVENT";
+        }
+
+        beerAudit.setAuditEventType(eventType);
+
+        Authentication authentication = beerEvent.getAuthentication();
         if (authentication != null && authentication.getName() != null) {
             beerAudit.setPrincipalName(authentication.getName());
         }

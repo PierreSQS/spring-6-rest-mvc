@@ -2,6 +2,8 @@ package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.events.BeerCreatedEvent;
+import guru.springframework.spring6restmvc.events.BeerPatchedEvent;
+import guru.springframework.spring6restmvc.events.BeerUpdatedEvent;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
@@ -41,6 +43,12 @@ public class BeerServiceJPA implements BeerService {
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_PAGE_SIZE = 25;
+
+    static {
+        // LOGGING FOR VIRTUAL THREADS
+        log.info("Current Thread Name: {}", Thread.currentThread().getName());
+        log.info("Current Thread ID: {}", Thread.currentThread().threadId());
+    }
 
     @Cacheable(cacheNames = "beerListCache")
     @Override
@@ -127,9 +135,6 @@ public class BeerServiceJPA implements BeerService {
         // For Auditing
         val savedBeer = beerRepository.save(beerMapper.beerDtoToBeer(beer));
 
-        log.info("Current Thread Name: " + Thread.currentThread().getName());
-        log.info("Current Thread ID: " + Thread.currentThread().threadId());
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         applicationEventPublisher.publishEvent(new BeerCreatedEvent(savedBeer, authentication));
@@ -151,6 +156,12 @@ public class BeerServiceJPA implements BeerService {
             foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            // EVENT PUBLISHING
+            applicationEventPublisher.publishEvent(new BeerUpdatedEvent(foundBeer, authentication));
+
         }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
@@ -202,6 +213,12 @@ public class BeerServiceJPA implements BeerService {
             }
             atomicReference.set(Optional.of(beerMapper
                     .beerToBeerDto(beerRepository.save(foundBeer))));
+
+            // EVENT PUBLISHING
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            applicationEventPublisher.publishEvent(new BeerPatchedEvent(foundBeer, authentication));
+
         }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
