@@ -12,5 +12,5 @@ create table beer_audit (
       created_date_audit datetime(6),
       principal_name varchar(255),
       audit_event_type varchar(255),
-      primary key (audit_id)
+      primary key (auditid)
 ) engine=InnoDB;
