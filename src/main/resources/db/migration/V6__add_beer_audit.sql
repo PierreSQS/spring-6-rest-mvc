@@ -1,5 +1,5 @@
 create table beer_audit (
-      audit_id varchar(36) not null,
+      auditid varchar(36) not null, -- according to Pierrot BeerAudit
       id varchar(36) not null,
       beer_name varchar(50) not null,
       beer_style smallint not null,
