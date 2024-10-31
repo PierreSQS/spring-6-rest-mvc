@@ -38,7 +38,7 @@ public class SpringSecConfig {
                                                   "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())
                 // DISABLE CSRF FOR H2 CONSOLE
-                .csrf(csrfConfigurer -> csrfConfigurer.ignoringRequestMatchers("/h2-console/**"))
+                .csrf(csrfConfigurer -> csrfConfigurer.ignoringRequestMatchers(PathRequest.toH2Console()))
                 .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
                        httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
 
