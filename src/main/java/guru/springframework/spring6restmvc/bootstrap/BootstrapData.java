@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Modified by Pierrot on 2024-10-13.
+ * Modified by Pierrot on 2024-11-01.
  */
 @Slf4j
 @Component
@@ -78,7 +78,7 @@ public class BootstrapData implements CommandLineRunner {
             log.info("loaded {} Beers from CSV-File ", recs.size());
             log.info("total Beers loaded: {}", beerRepository.count());
         } else {
-            log.info("Data already present in the DB. Data Loading not necessary!!");
+            log.info("More than 10 Beers present. CSV-Data loading did not occur!!");
         }
     }
 
@@ -118,6 +118,8 @@ public class BootstrapData implements CommandLineRunner {
             beerRepository.saveAll(additionalBeers);
 
             log.info("loaded {} Beers manually", additionalBeers.size());
+        }else {
+            log.info("Beers present. Manual loading did not occur!!");
         }
 
     }
@@ -153,6 +155,8 @@ public class BootstrapData implements CommandLineRunner {
             customerRepository.saveAll(customers);
 
             log.info("loaded {} Customers",customers.size());
+        } else {
+            log.info("customers present in the DB!! Data loading did not occur!!");
         }
 
     }
