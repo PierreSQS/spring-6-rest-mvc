@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Modified by Pierrot, on 2024-10-12.
+ * Modified by Pierrot, on 2024-11-01.
  */
 @Profile("!test")
 @Configuration
