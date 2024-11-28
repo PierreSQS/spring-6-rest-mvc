@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2024-11-28.
  */
 @Service
 @Primary
@@ -49,11 +49,8 @@ public class CustomerServiceJPA implements CustomerService {
 
         customerRepository.findById(customerId).ifPresentOrElse(foundCustomer -> {
             foundCustomer.setName(customer.getName());
-            atomicReference.set(Optional.of(customerMapper
-                    .customerToCustomerDto(customerRepository.save(foundCustomer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+            atomicReference.set(Optional.of(customerMapper.customerToCustomerDto(customerRepository.save(foundCustomer))));
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
@@ -77,9 +74,7 @@ public class CustomerServiceJPA implements CustomerService {
             }
             atomicReference.set(Optional.of(customerMapper
                     .customerToCustomerDto(customerRepository.save(foundCustomer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
