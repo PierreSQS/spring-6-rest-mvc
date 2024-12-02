@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- *  * Modified by Pierrot on 2024-11-28.
+ *  * Modified by Pierrot on 2024-12-02.
  */
 @Getter
 @Setter
@@ -34,7 +34,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 50, message = "Beer's Name length must be maximal 50!")
     @Column(length = 50)
     private String beerName;
 
