@@ -25,7 +25,7 @@ public class BootstrapData implements CommandLineRunner {
     private final CustomerRepository customerRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         loadBeerData();
         loadCustomerData();
     }
@@ -66,6 +66,8 @@ public class BootstrapData implements CommandLineRunner {
             beerRepository.saveAll(additionalBeers);
 
             log.info("loaded {} Beers manually", additionalBeers.size());
+        } else {
+            log.info("### Beers are present in the DB.Bootstrap skipped");
         }
 
     }
@@ -98,6 +100,8 @@ public class BootstrapData implements CommandLineRunner {
             customerRepository.saveAll(customers);
 
             log.info("loaded {} Customers",customers.size());
+        } else {
+            log.info("### Customers are present in the DB.Bootstrap skipped");
         }
 
     }
