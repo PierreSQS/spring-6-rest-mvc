@@ -31,7 +31,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        Beer testBeer = beerServiceImpl.listBeers().get(0);
+        Beer testBeer = beerServiceImpl.listBeers().getFirst();
 
         given(beerService.getBeerById(any(UUID.class))).willReturn(testBeer);
 
