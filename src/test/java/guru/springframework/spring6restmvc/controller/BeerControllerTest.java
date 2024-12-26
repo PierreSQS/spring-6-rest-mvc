@@ -42,10 +42,10 @@ class BeerControllerTest {
         beerToCreate.setVersion(null);
         beerToCreate.setId(null);
 
-        Beer firstBeer = beerServiceImpl.listBeers().getFirst();
+        Beer createdBeer = beerServiceImpl.listBeers().get(1);
 
         given(beerService.saveNewBeer(any(Beer.class)))
-                .willReturn(firstBeer);
+                .willReturn(createdBeer);
 
         // When, Then
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/beer")
@@ -56,7 +56,7 @@ class BeerControllerTest {
                 .andReturn();
 
         String location = mvcResult.getResponse().getHeader("Location");
-        assertThat(location).isEqualTo("/api/v1/beer/"+beerToCreate.getId().toString());
+        assertThat(location).isEqualTo("/api/v1/beer/"+createdBeer.getId().toString());
 
     }
 
