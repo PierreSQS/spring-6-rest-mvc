@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.services.BeerService;
@@ -11,11 +10,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BeerController.class)
@@ -33,12 +36,27 @@ class BeerControllerTest {
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
 
     @Test
-    void testCreateNewBeer() throws JsonProcessingException {
-        Beer beer = beerServiceImpl.listBeers().getFirst();
+    void testCreateNewBeer() throws Exception {
+        // Given
+        Beer beerToCreate = beerServiceImpl.listBeers().getFirst();
+        beerToCreate.setVersion(null);
+        beerToCreate.setId(null);
 
-        System.out.println(objectMapper.writeValueAsString(beer));
+        Beer firstBeer = beerServiceImpl.listBeers().getFirst();
 
-        assertThat(beer.getId()).isNotNull();
+        given(beerService.saveNewBeer(any(Beer.class)))
+                .willReturn(firstBeer);
+
+        // When, Then
+        MvcResult mvcResult = mockMvc.perform(post("/api/v1/beer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerToCreate)))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andReturn();
+
+        String location = mvcResult.getResponse().getHeader("Location");
+        assertThat(location).isEqualTo("/api/v1/beer/"+beerToCreate.getId().toString());
 
     }
 
