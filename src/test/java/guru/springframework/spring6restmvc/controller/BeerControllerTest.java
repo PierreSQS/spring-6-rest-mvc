@@ -10,9 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -48,15 +47,15 @@ class BeerControllerTest {
                 .willReturn(createdBeer);
 
         // When, Then
-        MvcResult mvcResult = mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post("/api/v1/beer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerToCreate)))
                 .andExpect(status().isCreated())
+                .andExpect(header().string("Location",
+                        equalTo("/api/v1/beer/"+createdBeer.getId().toString()))
+                )
                 .andDo(print())
                 .andReturn();
-
-        String location = mvcResult.getResponse().getHeader("Location");
-        assertThat(location).isEqualTo("/api/v1/beer/"+createdBeer.getId().toString());
 
     }
 
