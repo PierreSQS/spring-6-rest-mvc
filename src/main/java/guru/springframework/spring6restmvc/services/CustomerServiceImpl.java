@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 2024-12-26.
  */
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private Map<UUID, Customer> customerMap;
+    private final Map<UUID, Customer> customerMap;
 
     public CustomerServiceImpl() {
         Customer customer1 = Customer.builder()

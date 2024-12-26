@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,9 +34,11 @@ class BeerControllerTest {
 
     @Test
     void testCreateNewBeer() throws JsonProcessingException {
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer beer = beerServiceImpl.listBeers().getFirst();
 
         System.out.println(objectMapper.writeValueAsString(beer));
+
+        assertThat(beer.getId()).isNotNull();
 
     }
 
