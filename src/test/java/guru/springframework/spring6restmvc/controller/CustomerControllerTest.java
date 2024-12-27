@@ -6,17 +6,22 @@ import guru.springframework.spring6restmvc.services.CustomerService;
 import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -42,6 +47,25 @@ class CustomerControllerTest {
         customerServiceImpl = new CustomerServiceImpl();
     }
 
+    @Test
+    void deleteCustomer() throws Exception{
+        // Given
+        Customer customerToDelete = customerServiceImpl.getAllCustomers().getFirst();
+
+        // When, Then
+        mockMvc.perform(delete("/api/v1/customer/{customerID}", customerToDelete.getId()))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+
+        ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
+
+        verify(customerServMock, times(1))
+                .deleteCustomerById(argumentCaptor.capture());
+
+        assertThat(argumentCaptor.getValue()).isEqualTo(customerToDelete.getId());
+
+    }
+    
     @Test
     void updateCustomer() throws Exception {
         // Given
