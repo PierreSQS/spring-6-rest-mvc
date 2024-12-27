@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,16 +59,20 @@ class BeerControllerTest {
     void testPatchBeer() throws Exception {
         // Given
         Beer beerToPatch = beerServiceImpl.listBeers().getLast();
-        beerToPatch.setBeerName("Beer To Patch");
+        Map<String, String> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New  Name");
+
 
         mockMvc.perform(patch("/api/v1/beer/{beerID}",beerToPatch.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerToPatch)))
+                        .content(objectMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
         verify(beerServMock, times(1))
-                .patchBeerById(beerToPatch.getId(), beerToPatch);
+                .patchBeerById(beerToPatch.getId(), Beer.builder()
+                        .beerName(beerMap.get("beerName"))
+                        .build());
 
     }
 
