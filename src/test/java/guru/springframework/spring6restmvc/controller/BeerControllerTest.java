@@ -19,6 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -35,13 +36,31 @@ class BeerControllerTest {
     ObjectMapper objectMapper;
 
     @MockitoBean
-    BeerService beerService;
+    BeerService beerServMock;
+
 
     BeerServiceImpl beerServiceImpl;
 
     @BeforeEach
     void setUp() {
         beerServiceImpl  = new BeerServiceImpl();
+    }
+
+    @Test
+    void testPatchBeer() throws Exception {
+        // Given
+        Beer beerToPatch = beerServiceImpl.listBeers().getLast();
+        beerToPatch.setBeerName("Beer To Patch");
+
+        mockMvc.perform(patch("/api/v1/beer/{beerID}",beerToPatch.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerToPatch)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+
+        verify(beerServMock, times(1))
+                .patchBeerById(beerToPatch.getId(), beerToPatch);
+
     }
 
     @Test
@@ -54,7 +73,7 @@ class BeerControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
-        verify(beerService, times(1))
+        verify(beerServMock, times(1))
                 .deleteById(beerToDelete.getId());
     }
 
@@ -70,7 +89,7 @@ class BeerControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
-        verify(beerService, times(1))
+        verify(beerServMock, times(1))
                 .updateBeerById(updatedBeer.getId(),updatedBeer);
 
     }
@@ -84,7 +103,7 @@ class BeerControllerTest {
 
         Beer createdBeer = beerServiceImpl.listBeers().get(1);
 
-        given(beerService.saveNewBeer(any(Beer.class)))
+        given(beerServMock.saveNewBeer(any(Beer.class)))
                 .willReturn(createdBeer);
 
         // When, Then
@@ -102,7 +121,7 @@ class BeerControllerTest {
 
     @Test
     void testListBeers() throws Exception {
-        given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
+        given(beerServMock.listBeers()).willReturn(beerServiceImpl.listBeers());
 
         mockMvc.perform(get("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON))
@@ -115,7 +134,7 @@ class BeerControllerTest {
     void getBeerById() throws Exception {
         Beer testBeer = beerServiceImpl.listBeers().getFirst();
 
-        given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+        given(beerServMock.getBeerById(testBeer.getId())).willReturn(testBeer);
 
         mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON))
