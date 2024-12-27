@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,11 +47,35 @@ class CustomerControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    @Captor ArgumentCaptor<Customer> customerArgumentCaptor;
+
     CustomerServiceImpl customerServiceImpl;
 
     @BeforeEach
     void setUp() {
         customerServiceImpl = new CustomerServiceImpl();
+    }
+
+    @Test
+    void testPatchCustomer() throws Exception {
+        // Given
+        Customer custToPatch = customerServiceImpl.getAllCustomers().getLast();
+        Map<String , String> custMap = new HashMap<>();
+        custMap.put("name","Cust To Patch");
+
+        // When, Then
+        mockMvc.perform(patch("/api/v1/customer/{custID}",custToPatch.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(custMap)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+
+        verify(customerServMock, times(1))
+                .patchCustomerById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+
+        assertThat(custToPatch.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+
+        assertThat(custMap).containsEntry("name", custMap.get("name"));
     }
 
     @Test
