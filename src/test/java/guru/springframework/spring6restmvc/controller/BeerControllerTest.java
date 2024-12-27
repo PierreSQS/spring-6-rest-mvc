@@ -48,6 +48,8 @@ class BeerControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    @Captor ArgumentCaptor<Beer> beerArgumentCaptor;
+
     BeerServiceImpl beerServiceImpl;
 
     @BeforeEach
@@ -70,9 +72,11 @@ class BeerControllerTest {
                 .andDo(print());
 
         verify(beerServMock, times(1))
-                .patchBeerById(beerToPatch.getId(), Beer.builder()
-                        .beerName(beerMap.get("beerName"))
-                        .build());
+                .patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
+
+        assertThat(beerMap).containsEntry("beerName", beerMap.get("beerName"));
+
+        assertThat(beerToPatch.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 
     }
 
