@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,6 +42,20 @@ class BeerControllerTest {
     @BeforeEach
     void setUp() {
         beerServiceImpl  = new BeerServiceImpl();
+    }
+
+    @Test
+    void deleteBeer() throws Exception{
+        // Given
+        Beer beerToDelete = beerServiceImpl.listBeers().getFirst();
+
+        // When, Then
+        mockMvc.perform(delete("/api/v1/beer/{beerID}", beerToDelete.getId()))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+
+        verify(beerService, times(1))
+                .deleteById(beerToDelete.getId());
     }
 
     @Test
