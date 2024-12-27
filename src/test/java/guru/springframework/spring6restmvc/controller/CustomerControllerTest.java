@@ -1,8 +1,10 @@
 package guru.springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.model.Customer;
 import guru.springframework.spring6restmvc.services.CustomerService;
 import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,24 +13,58 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
     @MockitoBean
-    CustomerService customerService;
+    CustomerService customerServMock;
 
     @Autowired
     MockMvc mockMvc;
 
-    CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl();
+    @Autowired
+    ObjectMapper objectMapper;
+
+    CustomerServiceImpl customerServiceImpl;
+
+    @BeforeEach
+    void setUp() {
+        customerServiceImpl = new CustomerServiceImpl();
+    }
+
+    @Test
+    void testCreateCustomer() throws Exception {
+        // Given
+        Customer firstCustomer = customerServiceImpl.getAllCustomers().getFirst();
+
+        Customer custToSave = Customer.builder()
+                .name(firstCustomer.getName())
+                .createdDate(firstCustomer.getCreatedDate())
+                .updateDate(firstCustomer.getUpdateDate())
+                .build();
+
+        given(customerServMock.saveNewCustomer(any(Customer.class)))
+                .willReturn(firstCustomer);
+
+        // When, Then
+        mockMvc.perform(post("/api/v1/customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(custToSave)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/v1/customer/" + firstCustomer.getId()))
+                .andDo(print());
+    }
 
     @Test
     void listAllCustomers() throws Exception {
-        given(customerService.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
+        given(customerServMock.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
 
         mockMvc.perform(get("/api/v1/customer")
                 .accept(MediaType.APPLICATION_JSON))
@@ -41,7 +77,7 @@ class CustomerControllerTest {
     void getCustomerById() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().getFirst();
 
-        given(customerService.getCustomerById(customer.getId())).willReturn(customer);
+        given(customerServMock.getCustomerById(customer.getId())).willReturn(customer);
 
         mockMvc.perform(get("/api/v1/customer/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
