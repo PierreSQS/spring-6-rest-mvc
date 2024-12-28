@@ -77,7 +77,7 @@ class CustomerControllerTest {
 
         assertThat(custToPatch.getId()).isEqualTo(uuidArgumentCaptor.getValue());
 
-        assertThat(custMap).containsEntry("name", custMap.get("name"));
+        assertThat(custMap).containsEntry("name", customerArgumentCaptor.getValue().getName());
     }
 
     @Test
