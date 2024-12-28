@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static guru.springframework.spring6restmvc.controller.BeerController.BEER_PATH;
+import static guru.springframework.spring6restmvc.controller.BeerController.BEER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
@@ -65,7 +67,7 @@ class BeerControllerTest {
         beerMap.put("beerName", "New  Name");
 
 
-        mockMvc.perform(patch("/api/v1/beer/{beerID}",beerToPatch.getId())
+        mockMvc.perform(patch(BEER_PATH_ID,beerToPatch.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isNoContent())
@@ -86,7 +88,7 @@ class BeerControllerTest {
         Beer beerToDelete = beerServiceImpl.listBeers().getFirst();
 
         // When, Then
-        mockMvc.perform(delete("/api/v1/beer/{beerID}", beerToDelete.getId()))
+        mockMvc.perform(delete(BEER_PATH_ID, beerToDelete.getId()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
@@ -102,7 +104,7 @@ class BeerControllerTest {
         Beer updatedBeer = beerServiceImpl.listBeers().getFirst();
 
         // When, Then
-        mockMvc.perform(put("/api/v1/beer/{beerID}", updatedBeer.getId())
+        mockMvc.perform(put(BEER_PATH_ID, updatedBeer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedBeer)))
                 .andExpect(status().isNoContent())
@@ -126,13 +128,12 @@ class BeerControllerTest {
                 .willReturn(createdBeer);
 
         // When, Then
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BEER_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerToCreate)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location",
-                        equalTo("/api/v1/beer/"+createdBeer.getId().toString()))
-                )
+                        equalTo(BEER_PATH+"/"+createdBeer.getId().toString())))
                 .andDo(print())
                 .andReturn();
 
@@ -142,7 +143,7 @@ class BeerControllerTest {
     void testListBeers() throws Exception {
         given(beerServMock.listBeers()).willReturn(beerServiceImpl.listBeers());
 
-        mockMvc.perform(get("/api/v1/beer")
+        mockMvc.perform(get(BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -155,7 +156,7 @@ class BeerControllerTest {
 
         given(beerServMock.getBeerById(testBeer.getId())).willReturn(testBeer);
 
-        mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
+        mockMvc.perform(get(BEER_PATH_ID,testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

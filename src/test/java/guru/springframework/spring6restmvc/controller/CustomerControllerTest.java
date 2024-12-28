@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static guru.springframework.spring6restmvc.controller.CustomerController.CUSTOMER_PATH;
+import static guru.springframework.spring6restmvc.controller.CustomerController.CUSTOMER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,7 +66,7 @@ class CustomerControllerTest {
         custMap.put("name","Cust To Patch");
 
         // When, Then
-        mockMvc.perform(patch("/api/v1/customer/{custID}",custToPatch.getId())
+        mockMvc.perform(patch(CUSTOMER_PATH_ID,custToPatch.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(custMap)))
                 .andExpect(status().isNoContent())
@@ -84,7 +86,7 @@ class CustomerControllerTest {
         Customer customerToDelete = customerServiceImpl.getAllCustomers().getFirst();
 
         // When, Then
-        mockMvc.perform(delete("/api/v1/customer/{customerID}", customerToDelete.getId()))
+        mockMvc.perform(delete(CUSTOMER_PATH_ID, customerToDelete.getId()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
@@ -102,7 +104,7 @@ class CustomerControllerTest {
         Customer updatedCustomer = customerServiceImpl.getAllCustomers().getFirst();
 
         // When, Then
-        mockMvc.perform(put("/api/v1/customer/{customerID}", updatedCustomer.getId())
+        mockMvc.perform(put(CUSTOMER_PATH_ID, updatedCustomer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedCustomer)))
                 .andExpect(status().isNoContent())
@@ -127,7 +129,7 @@ class CustomerControllerTest {
                 .willReturn(firstCustomer);
 
         // When, Then
-        mockMvc.perform(post("/api/v1/customer")
+        mockMvc.perform(post(CUSTOMER_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(custToSave)))
                 .andExpect(status().isCreated())
@@ -139,7 +141,7 @@ class CustomerControllerTest {
     void listAllCustomers() throws Exception {
         given(customerServMock.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
 
-        mockMvc.perform(get("/api/v1/customer")
+        mockMvc.perform(get(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -152,7 +154,7 @@ class CustomerControllerTest {
 
         given(customerServMock.getCustomerById(customer.getId())).willReturn(customer);
 
-        mockMvc.perform(get("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(get(CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
