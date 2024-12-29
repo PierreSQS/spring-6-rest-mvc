@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 2024-12-29.
  */
 
 @RequiredArgsConstructor
@@ -24,39 +24,39 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PatchMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity patchCustomerById(@PathVariable("customerId") UUID customerId,
+    public ResponseEntity<Void> patchCustomerById(@PathVariable("customerId") UUID customerId,
                                                 @RequestBody Customer customer){
 
         customerService.patchCustomerById(customerId, customer);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity deleteCustomerById(@PathVariable("customerId") UUID customerId){
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable("customerId") UUID customerId){
 
         customerService.deleteCustomerById(customerId);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity updateCustomerByID(@PathVariable("customerId") UUID customerId,
+    public ResponseEntity<Void> updateCustomerByID(@PathVariable("customerId") UUID customerId,
                                              @RequestBody Customer customer){
 
         customerService.updateCustomerById(customerId, customer);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity handlePost(@RequestBody Customer customer){
+    public ResponseEntity<HttpHeaders> handlePost(@RequestBody Customer customer){
         Customer savedCustomer = customerService.saveNewCustomer(customer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH + "/" + savedCustomer.getId().toString());
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping(CUSTOMER_PATH)

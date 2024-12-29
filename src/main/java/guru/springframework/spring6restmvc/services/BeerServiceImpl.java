@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 2024-12-29.
  */
 @Slf4j
 @Service
@@ -110,7 +110,7 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public Optional<Beer> getBeerById(UUID id) {
 
-        log.debug("Get Beer by Id - in service. Id: " + id.toString());
+        log.debug("Get Beer by Id - in service. Id: {}", id.toString());
 
         return Optional.of(beerMap.get(id));
     }
