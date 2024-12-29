@@ -10,8 +10,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -36,7 +36,7 @@ class BeerControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     BeerService beerService;
 
     BeerServiceImpl beerServiceImpl;
@@ -54,7 +54,7 @@ class BeerControllerTest {
 
     @Test
     void testPatchBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer beer = beerServiceImpl.listBeers().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
@@ -68,12 +68,12 @@ class BeerControllerTest {
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
 
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
-        assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
+        assertThat(beerMap).containsEntry("beerName",beerArgumentCaptor.getValue().getBeerName());
     }
 
     @Test
     void testDeleteBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer beer = beerServiceImpl.listBeers().getFirst();
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON))
@@ -86,7 +86,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer beer = beerServiceImpl.listBeers().getFirst();
 
         mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ class BeerControllerTest {
 
     @Test
     void testCreateNewBeer() throws Exception {
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer beer = beerServiceImpl.listBeers().getFirst();
         beer.setVersion(null);
         beer.setId(null);
 
@@ -135,7 +135,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        Beer testBeer = beerServiceImpl.listBeers().get(0);
+        Beer testBeer = beerServiceImpl.listBeers().getFirst();
 
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 

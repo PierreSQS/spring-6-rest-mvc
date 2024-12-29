@@ -10,8 +10,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CustomerController.class)
 class CustomerControllerTest {
 
-    @MockBean
+    @MockitoBean
     CustomerService customerService;
 
     @Autowired
@@ -54,7 +54,7 @@ class CustomerControllerTest {
 
     @Test
     void testPatchCustomer() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        Customer customer = customerServiceImpl.getAllCustomers().getFirst();
 
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("name", "New Name");
@@ -74,7 +74,7 @@ class CustomerControllerTest {
 
     @Test
     void testDeleteCustomer() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        Customer customer = customerServiceImpl.getAllCustomers().getFirst();
 
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -87,7 +87,7 @@ class CustomerControllerTest {
 
     @Test
     void testUpdateCustomer() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        Customer customer = customerServiceImpl.getAllCustomers().getFirst();
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                 .content(objectMapper.writeValueAsString(customer))
@@ -102,7 +102,7 @@ class CustomerControllerTest {
 
     @Test
     void testCreateCustomer() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        Customer customer = customerServiceImpl.getAllCustomers().getFirst();
         customer.setId(null);
         customer.setVersion(null);
 
@@ -138,7 +138,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        Customer customer = customerServiceImpl.getAllCustomers().getFirst();
 
         given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
 
