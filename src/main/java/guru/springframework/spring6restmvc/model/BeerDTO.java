@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Renamed by Pierrot, 2024-12-29.
  */
 @Builder
 @Data
-public class Beer {
+public class BeerDTO {
     private UUID id;
     private Integer version;
     private String beerName;

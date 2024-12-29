@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Renamed by Pierrot, 2024-12-29.
  */
 @Data
 @Builder
-public class Customer {
+public class CustomerDTO {
 
     private String name;
     private UUID id;
