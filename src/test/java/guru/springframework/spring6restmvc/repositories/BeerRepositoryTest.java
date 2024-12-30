@@ -18,6 +18,6 @@ class BeerRepositoryTest {
     void testSaveBeer() {
         Beer savedBeer = beerRepo.save(Beer.builder().beerName("Beer To Save").build());
 
-        assertThat(savedBeer.getUuid()).isNotNull();
+        assertThat(savedBeer.getId()).isNotNull();
     }
 }
