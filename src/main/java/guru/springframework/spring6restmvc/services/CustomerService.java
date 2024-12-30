@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Renamed by Pierrot, 2024-12-29.
+ * Modified by Pierrot, 2024-12-29.
  */
 public interface CustomerService {
 
