@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.entities.Beer;
+import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
@@ -31,6 +32,23 @@ class BeerControllerIT {
     @Autowired
     BeerRepository beerRepository;
 
+    @Autowired
+    BeerMapper beerMapper;
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUpdateExistingBeer() {
+        Beer lastBeer = beerRepository.findAll().getLast();
+        lastBeer.setBeerName("Updated Beer");
+
+        beerController.updateById(lastBeer.getId(), beerMapper.beerToBeerDto(lastBeer));
+
+        Beer updatedBeer = beerRepository.findById(lastBeer.getId()).get();
+
+        assertThat(updatedBeer.getBeerName()).isEqualTo(lastBeer.getBeerName());
+
+    }
 
     @Rollback
     @Transactional
@@ -38,7 +56,7 @@ class BeerControllerIT {
     void testSaveBeer() {
         // create DTO to save
         BeerDTO beerDTOToSave = BeerDTO.builder()
-                .beerName("Beer To  Save")
+                .beerName("New Beer")
                 .beerStyle(BeerStyle.LAGER)
                 .build();
 
