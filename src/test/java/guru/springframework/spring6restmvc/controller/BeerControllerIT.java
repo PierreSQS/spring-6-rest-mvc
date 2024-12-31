@@ -4,20 +4,24 @@ import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Slf4j
 @SpringBootTest
 class BeerControllerIT {
 
@@ -40,7 +44,15 @@ class BeerControllerIT {
 
         ResponseEntity<HttpHeaders> responseEntity = beerController.handlePost(beerDTOToSave);
 
+        String[] locationUUID = Objects.requireNonNull(responseEntity.getHeaders().getLocation())
+                .getPath().split("/");
+
+        String savedBeerUUID = locationUUID[4];
+        log.info("The saved Beer UUID: {}", savedBeerUUID);
+
+        assertThat(savedBeerUUID).isNotNull();
         assertThat(responseEntity.getHeaders()).containsKey("Location");
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
