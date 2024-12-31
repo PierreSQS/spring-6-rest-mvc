@@ -2,10 +2,13 @@ package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,22 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+
+    @Rollback
+    @Transactional
+    @Test
+    void testSaveBeer() {
+        // create DTO to save
+        BeerDTO beerDTOToSave = BeerDTO.builder()
+                .beerName("Beer To  Save")
+                .beerStyle(BeerStyle.LAGER)
+                .build();
+
+        ResponseEntity<HttpHeaders> responseEntity = beerController.handlePost(beerDTOToSave);
+
+        assertThat(responseEntity.getHeaders()).containsKey("Location");
+    }
 
     @Test
     void testBeerByIdNotFound() {
