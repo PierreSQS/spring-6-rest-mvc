@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,6 +50,8 @@ public class BeerServiceJPA implements BeerService {
 
         beerOptional.ifPresent(beer -> {
             beerDTO.setId(beerId);
+            beerDTO.setCreatedDate(LocalDateTime.now());
+            beerDTO.setUpdateDate(LocalDateTime.now());
             beerRepository.save(beerMapper.beerDtoToBeer(beerDTO));
         });
 
