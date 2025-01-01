@@ -42,11 +42,12 @@ class BeerControllerIT {
         Beer lastBeer = beerRepository.findAll().getLast();
         lastBeer.setBeerName("Updated Beer");
 
-        beerController.updateById(lastBeer.getId(), beerMapper.beerToBeerDto(lastBeer));
+        ResponseEntity<Void> respEntity = beerController.updateById(lastBeer.getId(), beerMapper.beerToBeerDto(lastBeer));
 
         Beer updatedBeer = beerRepository.findById(lastBeer.getId()).get();
 
         assertThat(updatedBeer.getBeerName()).isEqualTo(lastBeer.getBeerName());
+        assertThat(respEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     }
 
