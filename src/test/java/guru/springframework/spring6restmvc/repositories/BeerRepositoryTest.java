@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -40,8 +41,14 @@ class BeerRepositoryTest {
                 .price(new BigDecimal("11.99"))
                 .build();
 
+        // Junit5 Exception Assertion
         assertThrows(ConstraintViolationException.class,
                 () -> beerRepository.saveAndFlush(beerToSave));
+
+        // AssertJ Exception Assertion
+        assertThatThrownBy(() -> beerRepository.saveAndFlush(beerToSave))
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("beerName length must be maximal 50 !");
     }
 
     @Test
