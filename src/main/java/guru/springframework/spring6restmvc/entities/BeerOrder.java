@@ -23,7 +23,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +41,6 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class BeerOrder {
 
@@ -73,6 +71,17 @@ public class BeerOrder {
 
     @OneToMany(mappedBy = "beerOrder")
     private Set<BeerOrderLine> beerOrderLines;
+
+    public BeerOrder(UUID id, Long version, LocalDateTime createdDate, LocalDateTime lastModifiedDate,
+                     String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines) {
+        this.id = id;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.customerRef = customerRef;
+        this.setCustomer(customer);
+        this.beerOrderLines = beerOrderLines;
+    }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
