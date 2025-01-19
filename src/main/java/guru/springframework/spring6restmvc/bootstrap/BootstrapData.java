@@ -18,12 +18,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 19.01.2025.
  */
 @Component
 @RequiredArgsConstructor
@@ -103,9 +102,7 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.save(beer1);
-            beerRepository.save(beer2);
-            beerRepository.save(beer3);
+            beerRepository.saveAll(List.of(beer1, beer2, beer3));
         }
 
     }
@@ -137,7 +134,7 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            customerRepository.saveAll(List.of(customer1, customer2, customer3));
         }
 
     }

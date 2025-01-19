@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.util.List;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 19.01.2025.
  */
 @Service
 public class BeerCsvServiceImpl implements BeerCsvService {
@@ -18,10 +18,9 @@ public class BeerCsvServiceImpl implements BeerCsvService {
     public List<BeerCSVRecord> convertCSV(File csvFile) {
 
         try {
-            List<BeerCSVRecord> beerCSVRecords = new CsvToBeanBuilder<BeerCSVRecord>(new FileReader(csvFile))
+            return new CsvToBeanBuilder<BeerCSVRecord>(new FileReader(csvFile))
                     .withType(BeerCSVRecord.class)
                     .build().parse();
-            return beerCSVRecords;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
