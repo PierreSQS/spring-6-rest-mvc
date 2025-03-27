@@ -36,6 +36,7 @@ import java.util.UUID;
 public class BeerOrderLine {
 
     @Id
+    @GeneratedValue
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
