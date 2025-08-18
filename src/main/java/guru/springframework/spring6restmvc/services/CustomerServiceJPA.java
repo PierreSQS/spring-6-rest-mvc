@@ -15,10 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2025-08-18.
  */
 @Slf4j
 @Service
@@ -45,7 +44,7 @@ public class CustomerServiceJPA implements CustomerService {
 
         return customerRepository.findAll().stream()
                 .map(customerMapper::customerToCustomerDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -68,9 +67,7 @@ public class CustomerServiceJPA implements CustomerService {
             foundCustomer.setName(customer.getName());
             atomicReference.set(Optional.of(customerMapper
                     .customerToCustomerDto(customerRepository.save(foundCustomer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
@@ -109,9 +106,7 @@ public class CustomerServiceJPA implements CustomerService {
             }
             atomicReference.set(Optional.of(customerMapper
                     .customerToCustomerDto(customerRepository.save(foundCustomer))));
-        }, () -> {
-            atomicReference.set(Optional.empty());
-        });
+        }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }

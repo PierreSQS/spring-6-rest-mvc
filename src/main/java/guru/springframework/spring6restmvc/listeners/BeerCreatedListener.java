@@ -27,7 +27,7 @@ public class BeerCreatedListener {
 
         val beerAudit = beerMapper.beerToBeerAudit(event.getBeer());
 
-        String eventType = null;
+        String eventType;
 
         switch (event) {
             case BeerCreatedEvent beerCreatedEvent -> eventType = "BEER_CREATED";
@@ -44,7 +44,7 @@ public class BeerCreatedListener {
         }
 
         val savedBeerAudit = beerAuditRepository.save(beerAudit);
-        log.debug("Beer Audit Saved: " + eventType + savedBeerAudit.getId());
+        log.debug("Beer Audit Saved: {}{}", eventType, savedBeerAudit.getId());
 
     }
 }

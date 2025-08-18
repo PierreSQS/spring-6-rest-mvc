@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2025-08-18.
  */
 @Service
 @RequiredArgsConstructor
@@ -87,12 +87,10 @@ public class BeerOrderServiceJPA implements BeerOrderService {
 
         Set<BeerOrderLine> beerOrderLines = new HashSet<>();
 
-        beerOrderCreateDTO.getBeerOrderLines().forEach(beerOrderLine -> {
-            beerOrderLines.add(BeerOrderLine.builder()
-                    .beer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new))
-                    .orderQuantity(beerOrderLine.getOrderQuantity())
-                    .build());
-        });
+        beerOrderCreateDTO.getBeerOrderLines().forEach(beerOrderLine -> beerOrderLines.add(BeerOrderLine.builder()
+                .beer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new))
+                .orderQuantity(beerOrderLine.getOrderQuantity())
+                .build()));
 
         return beerOrderRepository.save(BeerOrder.builder()
                 .customer(customer)
