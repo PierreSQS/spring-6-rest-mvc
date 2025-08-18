@@ -143,6 +143,12 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- added extra to avoid the dependency issue -->
+        <dependency>
+            <groupId>com.github.java-json-tools</groupId>
+            <artifactId>jackson-coreutils</artifactId>
+            <version>2.0</version>
+        </dependency>
         <dependency>
             <groupId>com.atlassian.oai</groupId>
             <artifactId>swagger-request-validator-restassured</artifactId>
@@ -243,13 +249,10 @@
         </plugins>
     </build>
     <repositories>
+        <!-- added for the missing jackson-coreutils dependency -->
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
     <pluginRepositories>
