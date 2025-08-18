@@ -55,7 +55,7 @@ class BeerOrderControllerTestIT {
 
     @Test
     void testDelete() throws Exception {
-        val beerOrder = beerOrderRepository.findAll().get(0);
+        val beerOrder = beerOrderRepository.findAll().getFirst();
 
         mockMvc.perform(delete(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
                         .with(jwtRequestPostProcessor))
@@ -71,18 +71,17 @@ class BeerOrderControllerTestIT {
     @Transactional
     @Test
     void testUpdateOrder() throws Exception {
-        val beerOrder = beerOrderRepository.findAll().get(0);
+        val beerOrder = beerOrderRepository.findAll().getFirst();
 
         Set<BeerOrderLineUpdateDTO> lines = new HashSet<>();
 
-        beerOrder.getBeerOrderLines().forEach(beerOrderLine -> {
-            lines.add(BeerOrderLineUpdateDTO.builder()
-                    .id(beerOrderLine.getId())
-                    .beerId(beerOrderLine.getBeer().getId())
-                    .orderQuantity(beerOrderLine.getOrderQuantity())
-                    .quantityAllocated(beerOrderLine.getQuantityAllocated())
-                    .build());
-        });
+        beerOrder.getBeerOrderLines().forEach(beerOrderLine ->
+                lines.add(BeerOrderLineUpdateDTO.builder()
+                        .id(beerOrderLine.getId())
+                        .beerId(beerOrderLine.getBeer().getId())
+                        .orderQuantity(beerOrderLine.getOrderQuantity())
+                        .quantityAllocated(beerOrderLine.getQuantityAllocated())
+                        .build()));
 
         val beerOrderUpdateDTO = BeerOrderUpdateDTO.builder()
                 .customerId(beerOrder.getCustomer().getId())
@@ -103,8 +102,8 @@ class BeerOrderControllerTestIT {
 
     @Test
     void testCreateBeerOrder() throws Exception {
-        val customer = customerRepository.findAll().get(0);
-        val beer = beerRepository.findAll().get(0);
+        val customer = customerRepository.findAll().getFirst();
+        val beer = beerRepository.findAll().getFirst();
 
         val beerOrderCreateDTO = BeerOrderCreateDTO.builder()
                 .customerId(customer.getId())
@@ -132,7 +131,7 @@ class BeerOrderControllerTestIT {
 
     @Test
     void testGetBeerOrderById() throws Exception {
-        val beerOrder = beerOrderRepository.findAll().get(0);
+        val beerOrder = beerOrderRepository.findAll().getFirst();
 
         mockMvc.perform(get(BeerOrderController.BEER_ORDER_PATH_ID, beerOrder.getId())
                         .with(jwtRequestPostProcessor))
