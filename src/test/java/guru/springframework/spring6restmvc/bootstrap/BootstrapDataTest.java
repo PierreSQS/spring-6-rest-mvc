@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ResourceLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,16 +30,19 @@ class BootstrapDataTest {
     @Autowired
     BeerCsvService csvService;
 
+    @Autowired
+    ResourceLoader resLoader;
+
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(beerRepository, customerRepository, csvService, beerOrderRepository );
+        bootstrapData = new BootstrapData(beerRepository, customerRepository, csvService, beerOrderRepository ,resLoader);
     }
 
     @Test
     void Testrun() throws Exception {
-        bootstrapData.run(null);
+        bootstrapData.run();
 
         assertThat(beerRepository.count()).isEqualTo(2413);
         assertThat(customerRepository.count()).isEqualTo(3);
