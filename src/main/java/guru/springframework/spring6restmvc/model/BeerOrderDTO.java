@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,8 +16,8 @@ import java.util.UUID;
 public class BeerOrderDTO {
     private UUID id;
     private Long version;
-    private Timestamp createdDate;
-    private Timestamp lastModifiedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
     private String customerRef;
 

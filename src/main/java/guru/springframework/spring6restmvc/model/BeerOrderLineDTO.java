@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -16,8 +16,8 @@ public class BeerOrderLineDTO {
     private UUID id;
 
     private Long version;
-    private Timestamp createdDate;
-    private Timestamp lastModifiedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
     private BeerDTO beer;
 
