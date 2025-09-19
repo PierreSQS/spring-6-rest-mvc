@@ -15,10 +15,6 @@
     <description>spring-6-rest-mvc</description>
     <properties>
         <java.version>25</java.version>
-
-<!--        temp, not updated in parent, yet. 1.18.40 or higher needed for Java 25-->
-        <lombok.version>1.18.42</lombok.version>
-
     </properties>
     <dependencies>
         <dependency>
