@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import tools.jackson.databind.annotation.JsonDeserialize;
@@ -15,9 +16,15 @@ import java.util.UUID;
 @Builder
 public class Customer {
 
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("id")
     private UUID id;
+
+    @JsonProperty("version")
     private Integer version;
+
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }
