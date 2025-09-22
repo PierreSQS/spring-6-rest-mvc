@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * Created by jt, Spring Framework Guru.
  */
-@JsonDeserialize(builder = Customer.CustomerBuilder.class)
+@JsonDeserialize(builder = CustomerDTO.CustomerDTOBuilder.class)
 @Data
 @Builder
 public class CustomerDTO {
