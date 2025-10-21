@@ -27,22 +27,20 @@ class BeerRepositoryTest {
     void testGetBeerListByName() {
         Page<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%", null);
 
-        assertThat(list.getContent().size()).isEqualTo(336);
+        assertThat(list.getContent()).hasSize(336);
     }
 
     @Test
     void testSaveBeerNameTooLong() {
 
-        assertThrows(ConstraintViolationException.class, () -> {
-            Beer savedBeer = beerRepository.save(Beer.builder()
-                    .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
-                    .beerStyle(BeerStyle.PALE_ALE)
-                    .upc("234234234234")
-                    .price(new BigDecimal("11.99"))
-                    .build());
+        beerRepository.save(Beer.builder()
+                .beerName("My Beer 0123345678901233456789012334567890123345678901233456789012334567890123345678901233456789")
+                .beerStyle(BeerStyle.PALE_ALE)
+                .upc("234234234234")
+                .price(new BigDecimal("11.99"))
+                .build());
 
-            beerRepository.flush();
-        });
+        assertThrows(ConstraintViolationException.class, () -> beerRepository.flush());
     }
 
     @Test
