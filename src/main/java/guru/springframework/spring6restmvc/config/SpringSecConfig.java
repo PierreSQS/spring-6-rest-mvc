@@ -15,7 +15,8 @@ public class SpringSecConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-               .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
+               .oauth2ResourceServer(oAuth2ResServerConfigurer ->
+                       oAuth2ResServerConfigurer.jwt(Customizer.withDefaults()));
 
         return http.build();
     }
