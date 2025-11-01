@@ -11,7 +11,6 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,9 +34,6 @@ class MySqlTest {
         registry.add("spring.datasource.password", mySQLContainer::getPassword);
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
     }
-
-    @Autowired
-    DataSource dataSource;
 
     @Autowired
     BeerRepository beerRepo;
