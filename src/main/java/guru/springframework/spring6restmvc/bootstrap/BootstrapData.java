@@ -10,9 +10,9 @@ import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Modified by Pierrot, 24.05.2024
+ * Modified by Pierrot, 01.11.2025
  */
 @Slf4j
 @Component
@@ -34,7 +34,9 @@ public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
     private final BeerCsvService beerCsvService;
-    private final ResourceLoader resourceLoader;
+
+    @Value("classpath:csvdata/beers.csv")
+    private Resource resource;
 
     @Transactional
     @Override
@@ -46,7 +48,6 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadCsvBeerData() throws IOException {
         if (beerRepository.count() < 10) {
-            Resource resource = resourceLoader.getResource("classpath:csvdata/beers.csv");
             List<BeerCSVRecord> beerCSVRecords = beerCsvService.convertCSV(
                     new BufferedReader(new InputStreamReader(resource.getInputStream())));
 
