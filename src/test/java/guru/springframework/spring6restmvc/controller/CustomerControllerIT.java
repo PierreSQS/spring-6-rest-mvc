@@ -72,7 +72,9 @@ class CustomerControllerIT {
         ResponseEntity<Void> responseEntity = customerController.updateCustomerByID(customer.getId(), customerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        Customer updatedCustomer = customerRepository.findById(customer.getId()).get();
+        Customer updatedCustomer = customerRepository.findById(customer.getId()).orElse(null);
+
+        assertThat(updatedCustomer).isNotNull();
         assertThat(updatedCustomer.getName()).isEqualTo(customerName);
     }
 
@@ -92,7 +94,7 @@ class CustomerControllerIT {
         String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
-        Customer customer = customerRepository.findById(savedUUID).get();
+        Customer customer = customerRepository.findById(savedUUID).orElse(null);
         assertThat(customer).isNotNull();
     }
 

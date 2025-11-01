@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 01-11-2025.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class BeerController {
     @DeleteMapping(BEER_PATH_ID)
     public ResponseEntity<Void> deleteById(@PathVariable("beerId") UUID beerId){
 
-        if(! beerService.deleteById(beerId)){
+        if(Boolean.FALSE.equals( beerService.deleteById(beerId))){
             throw new NotFoundException();
         }
 

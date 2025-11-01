@@ -109,7 +109,9 @@ class BeerControllerIT {
         ResponseEntity<Void> responseEntity = beerController.updateById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
-        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
+        Beer updatedBeer = beerRepository.findById(beer.getId()).orElse(null);
+
+        assertThat(updatedBeer).isNotNull();
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 
@@ -129,7 +131,7 @@ class BeerControllerIT {
         String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
-        Beer beer = beerRepository.findById(savedUUID).get();
+        Beer beer = beerRepository.findById(savedUUID).orElse(null);
         assertThat(beer).isNotNull();
     }
 
