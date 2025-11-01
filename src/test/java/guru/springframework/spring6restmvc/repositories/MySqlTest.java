@@ -25,7 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MySqlTest {
 
     @Container
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:9");
+    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:9")
+            .withConfigurationOverride("mysql-conf");
 
     // Set MySQL properties in the Docker container
     @DynamicPropertySource
