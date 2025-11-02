@@ -48,6 +48,11 @@ public class BeerOrderShipment {
         return super.hashCode();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
