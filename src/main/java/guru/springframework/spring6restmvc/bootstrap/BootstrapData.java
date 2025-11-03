@@ -67,7 +67,7 @@ public class BootstrapData implements CommandLineRunner {
 
             log.info("loaded {} Beers manually", additionalBeers.size());
         } else {
-            log.info("### Beers are present in the DB.Bootstrap skipped");
+            log.info("### Beers are present in the DB. Bootstrap skipped");
         }
 
     }
@@ -99,9 +99,9 @@ public class BootstrapData implements CommandLineRunner {
             List<Customer> customers = List.of(customer1, customer2, customer3);
             customerRepository.saveAll(customers);
 
-            log.info("loaded {} Customers",customers.size());
+            log.info("loaded {} Customers manually",customers.size());
         } else {
-            log.info("### Customers are present in the DB.Bootstrap skipped");
+            log.info("### Customers are present in the DB. Bootstrap skipped");
         }
 
     }
