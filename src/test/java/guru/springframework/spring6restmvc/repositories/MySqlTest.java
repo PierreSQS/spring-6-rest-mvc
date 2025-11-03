@@ -34,6 +34,6 @@ class MySqlTest {
     void testListBeers() {
         List<Beer> beerList = beerRepo.findAll();
 
-        assertThat(beerList).hasSizeGreaterThan(0);
+        assertThat(beerList).hasSize(3);
     }
 }
