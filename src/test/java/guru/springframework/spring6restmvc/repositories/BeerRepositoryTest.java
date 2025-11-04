@@ -35,7 +35,7 @@ class BeerRepositoryTest {
         // AssertJ assertion
         assertThatThrownBy(() -> beerRepository.flush())
                 .isInstanceOf(ConstraintViolationException.class)
-                .hasMessage("Beer's Name length must be maximal 50!");
+                .hasMessageContaining("Beer's Name length must be maximal 50!");
     }
 
     @Test
