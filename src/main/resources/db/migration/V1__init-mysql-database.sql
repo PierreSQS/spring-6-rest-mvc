@@ -14,7 +14,7 @@
         update_date datetime(6),
         version integer,
         primary key (id)
-    ) engine=InnoDB;
+    );
 
     create table customer (
        id varchar(36) not null,
@@ -23,4 +23,4 @@
         update_date datetime(6),
         version integer,
         primary key (id)
-    ) engine=InnoDB;
+    );
