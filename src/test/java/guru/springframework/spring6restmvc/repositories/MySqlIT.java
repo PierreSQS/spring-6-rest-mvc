@@ -15,12 +15,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2025-11-05.
  */
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("localmysql")
-public class MySqlIT {
+class MySqlIT {
 
     @Container
     @ServiceConnection
@@ -33,6 +33,6 @@ public class MySqlIT {
     void testListBeers() {
         List<Beer> beers = beerRepository.findAll();
 
-        assertThat(beers.size()).isGreaterThan(0);
+        assertThat(beers).hasSize(2413);
     }
 }
