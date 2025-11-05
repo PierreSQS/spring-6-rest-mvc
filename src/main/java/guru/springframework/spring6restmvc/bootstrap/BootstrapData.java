@@ -6,16 +6,18 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2025-11-05.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
@@ -23,7 +25,7 @@ public class BootstrapData implements CommandLineRunner {
     private final CustomerRepository customerRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         loadBeerData();
         loadCustomerData();
     }
@@ -60,9 +62,12 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.save(beer1);
-            beerRepository.save(beer2);
-            beerRepository.save(beer3);
+            List<Beer> additionalBeers = List.of(beer1, beer2, beer3);
+            beerRepository.saveAll(additionalBeers);
+
+            log.info("loaded {} Beers manually", additionalBeers.size());
+        } else {
+            log.info("### Beers are present in the DB.Bootstrap skipped");
         }
 
     }
@@ -91,7 +96,12 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            List<Customer> customers = List.of(customer1, customer2, customer3);
+            customerRepository.saveAll(customers);
+
+            log.info("loaded {} Customers",customers.size());
+        } else {
+            log.info("### Customers are present in the DB.Bootstrap skipped");
         }
 
     }

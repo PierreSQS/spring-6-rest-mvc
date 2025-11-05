@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ *  * Modified by Pierrot on 2025-11-05.
  */
 @Getter
 @Setter
@@ -26,9 +25,9 @@ import java.util.UUID;
 public class Beer {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @UuidGenerator
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    // converting the binary UUID-Type into a string
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
@@ -37,7 +36,7 @@ public class Beer {
 
     @NotNull
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 50, message = "Beer's Name length must be maximal 50!")
     @Column(length = 50)
     private String beerName;
 
