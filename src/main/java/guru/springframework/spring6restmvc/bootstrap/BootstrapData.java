@@ -8,28 +8,34 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.repositories.CustomerRepository;
 import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2025-11-05.
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
     private final BeerRepository beerRepository;
     private final CustomerRepository customerRepository;
     private final BeerCsvService beerCsvService;
+
+    @Value("classpath:csvdata/beers.csv")
+    private Resource resource;
 
     @Transactional
     @Override
@@ -39,11 +45,11 @@ public class BootstrapData implements CommandLineRunner {
         loadCustomerData();
     }
 
-    private void loadCsvData() throws FileNotFoundException {
+    private void loadCsvData() throws IOException {
         if (beerRepository.count() < 10){
-            File file = ResourceUtils.getFile("classpath:csvdata/beers.csv");
 
-            List<BeerCSVRecord> recs = beerCsvService.convertCSV(file);
+            List<BeerCSVRecord> recs = beerCsvService.convertCSV(
+                    new BufferedReader(new InputStreamReader(resource.getInputStream())));
 
             recs.forEach(beerCSVRecord -> {
                 BeerStyle beerStyle = switch (beerCSVRecord.getStyle()) {
@@ -56,6 +62,7 @@ public class BootstrapData implements CommandLineRunner {
                     case "Saison / Farmhouse Ale" -> BeerStyle.SAISON;
                     case "Fruit / Vegetable Beer", "Winter Warmer", "Berliner Weissbier" -> BeerStyle.WHEAT;
                     case "English Pale Ale" -> BeerStyle.PALE_ALE;
+                    case "Gose" -> BeerStyle.GOSE;
                     default -> BeerStyle.PILSNER;
                 };
 
@@ -67,6 +74,9 @@ public class BootstrapData implements CommandLineRunner {
                                 .quantityOnHand(beerCSVRecord.getCount())
                         .build());
             });
+
+            log.info("loaded {} Beers from CSV-File ", recs.size());
+            log.info("total Beers loaded: {}", beerRepository.count());
         }
     }
 
@@ -102,9 +112,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            beerRepository.save(beer1);
-            beerRepository.save(beer2);
-            beerRepository.save(beer3);
+            List<Beer> additionalBeers = List.of(beer1, beer2, beer3);
+            beerRepository.saveAll(additionalBeers);
+
+            log.info("loaded {} Beers manually", additionalBeers.size());
         }
 
     }
@@ -133,7 +144,10 @@ public class BootstrapData implements CommandLineRunner {
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            List<Customer> customers = List.of(customer1, customer2, customer3);
+            customerRepository.saveAll(customers);
+
+            log.info("loaded {} Customers",customers.size());
         }
 
     }

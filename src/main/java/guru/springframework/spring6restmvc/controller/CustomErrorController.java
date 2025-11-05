@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by jt, Spring Framework Guru.
@@ -18,19 +17,19 @@ import java.util.stream.Collectors;
 public class CustomErrorController {
 
     @ExceptionHandler
-    ResponseEntity handleJPAViolations(TransactionSystemException exception){
+    ResponseEntity<Void> handleJPAViolations(TransactionSystemException exception){
         return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity handleBindErrors(MethodArgumentNotValidException exception){
+    ResponseEntity<List<Map<String, String>>> handleBindErrors(MethodArgumentNotValidException exception){
 
-        List errorList = exception.getFieldErrors().stream()
+        List<Map<String, String>> errorList = exception.getFieldErrors().stream()
                 .map(fieldError -> {
                     Map<String, String > errorMap = new HashMap<>();
                     errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
                     return errorMap;
-                }).collect(Collectors.toList());
+                }).toList();
 
         return ResponseEntity.badRequest().body(errorList);
     }
