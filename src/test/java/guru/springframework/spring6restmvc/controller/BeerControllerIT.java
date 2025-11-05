@@ -52,6 +52,19 @@ class BeerControllerIT {
     MockMvc mockMvc;
 
     @Test
+    void tesListBeersByStyleAndNameShowInventoryTruePage2() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("showInventory", "true")
+                        .queryParam("page", "2")
+                        .queryParam("size", "25"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(50)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(is(notNullValue())));
+    }
+
+    @Test
     void tesListBeersByStyleAndNameShowInventoryTrue() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "IPA")
@@ -199,7 +212,7 @@ class BeerControllerIT {
 
     @Test
     void testListBeers() {
-        List<BeerDTO> dtos = beerController.listBeers(null, null, false);
+        List<BeerDTO> dtos = beerController.listBeers(null, null, false, 2 , 50 );
 
         assertThat(dtos).hasSize(2413);
     }
@@ -209,7 +222,7 @@ class BeerControllerIT {
     @Test
     void testEmptyList() {
         beerRepository.deleteAll();
-        List<BeerDTO> dtos = beerController.listBeers(null, null, false);
+        List<BeerDTO> dtos = beerController.listBeers(null, null, false, 2, 50 );
 
         assertThat(dtos).isEmpty();
     }
