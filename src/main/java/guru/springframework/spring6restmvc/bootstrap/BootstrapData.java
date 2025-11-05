@@ -77,6 +77,8 @@ public class BootstrapData implements CommandLineRunner {
 
             log.info("loaded {} Beers from CSV-File ", recs.size());
             log.info("total Beers loaded: {}", beerRepository.count());
+        } else {
+            log.info("### Beers already loaded from the CSV-File.Loading from CSV-File skipped");
         }
     }
 
@@ -116,6 +118,8 @@ public class BootstrapData implements CommandLineRunner {
             beerRepository.saveAll(additionalBeers);
 
             log.info("loaded {} Beers manually", additionalBeers.size());
+        } else {
+            log.info("### Beers are present in the DB.Bootstrap skipped");
         }
 
     }
@@ -148,6 +152,8 @@ public class BootstrapData implements CommandLineRunner {
             customerRepository.saveAll(customers);
 
             log.info("loaded {} Customers",customers.size());
+        } else {
+            log.info("### Customers are present in the DB.Bootstrap skipped");
         }
 
     }
