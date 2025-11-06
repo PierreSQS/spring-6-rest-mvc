@@ -26,6 +26,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -58,10 +59,10 @@ class BeerControllerIT {
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "true")
-                        .queryParam("page", "2")
-                        .queryParam("size", "25"))
+                        .queryParam("pageNumber", "2")
+                        .queryParam("pageSize", "25"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)))
+                .andExpect(jsonPath("$.content", hasSize(25)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(is(notNullValue())))
                 .andDo(print());
     }
@@ -73,7 +74,7 @@ class BeerControllerIT {
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "true"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)))
+                .andExpect(jsonPath("$.content", hasSize(25)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(is(notNullValue())));
     }
 
@@ -84,7 +85,7 @@ class BeerControllerIT {
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "false"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)))
+                .andExpect(jsonPath("$.content", hasSize(25)))
                 .andExpect(jsonPath("$.content[0].quantityOnHand").value(is(nullValue())));
     }
 
@@ -94,7 +95,7 @@ class BeerControllerIT {
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)));
+                .andExpect(jsonPath("$.content", hasSize(25)));
     }
 
     @Test
@@ -102,7 +103,7 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)));
+                .andExpect(jsonPath("$.content", hasSize(25)));
     }
 
     @Test
@@ -110,7 +111,7 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                 .queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(11)));
+                .andExpect(jsonPath("$.content", hasSize(25)));
     }
 
     @Test
