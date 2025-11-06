@@ -8,23 +8,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2025-11-07.
  */
 @ControllerAdvice
 public class CustomErrorController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity handleBindErrors(MethodArgumentNotValidException exception){
+    ResponseEntity<List<Map<String, String>>> handleBindErrors(MethodArgumentNotValidException exception){
 
-        List errorList = exception.getFieldErrors().stream()
+        List<Map<String, String>> errorList = exception.getFieldErrors().stream()
                 .map(fieldError -> {
                     Map<String, String > errorMap = new HashMap<>();
                     errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
                     return errorMap;
-                }).collect(Collectors.toList());
+                }).toList();
 
         return ResponseEntity.badRequest().body(errorList);
     }
