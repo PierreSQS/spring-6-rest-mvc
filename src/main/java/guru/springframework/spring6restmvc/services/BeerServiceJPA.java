@@ -37,11 +37,11 @@ public class BeerServiceJPA implements BeerService {
 
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
 
-        if(StringUtils.hasText(beerName) && beerStyle == null) {
+        if (StringUtils.hasText(beerName) && beerStyle == null) {
             beerPage = listBeersByName(beerName, pageRequest);
-        } else if (!StringUtils.hasText(beerName) && beerStyle != null){
+        } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
             beerPage = listBeersByStyle(beerStyle, pageRequest);
-        } else if (StringUtils.hasText(beerName) && beerStyle != null){
+        } else if (StringUtils.hasText(beerName) && beerStyle != null) {
             beerPage = listBeersByNameAndStyle(beerName, beerStyle, pageRequest);
         } else {
             beerPage = beerRepository.findAll(pageRequest);
@@ -57,26 +57,10 @@ public class BeerServiceJPA implements BeerService {
 
     // build a PageRequest Object from the parameters
     public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber = (pageNumber != null && pageNumber > 0) ? pageNumber - 1 : DEFAULT_PAGE_NUMBER;
 
-        int queryPageNumber;
-        int queryPageSize;
+        int queryPageSize = (pageSize == null) ? DEFAULT_PAGE_SIZE : Math.min(pageSize, 1000);
 
-        if (pageNumber != null &&  pageNumber > 0) {
-            queryPageNumber = pageNumber - 1;
-        } else {
-            queryPageNumber = DEFAULT_PAGE_NUMBER;
-        }
-
-        if (pageSize == null) {
-            queryPageSize = DEFAULT_PAGE_SIZE;
-        } else {
-            if (pageSize > 1000) {
-                queryPageSize = 1000;
-            } else {
-                queryPageSize = pageSize;
-            }
-
-        }
         return PageRequest.of(queryPageNumber, queryPageSize);
     }
 
@@ -88,7 +72,7 @@ public class BeerServiceJPA implements BeerService {
         return beerRepository.findAllByBeerStyle(beerStyle, pageable);
     }
 
-    public Page<Beer> listBeersByName(String beerName, Pageable pageable){
+    public Page<Beer> listBeersByName(String beerName, Pageable pageable) {
         return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%", pageable);
     }
 
@@ -134,19 +118,19 @@ public class BeerServiceJPA implements BeerService {
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(foundBeer -> {
-            if (StringUtils.hasText(beer.getBeerName())){
+            if (StringUtils.hasText(beer.getBeerName())) {
                 foundBeer.setBeerName(beer.getBeerName());
             }
-            if (beer.getBeerStyle() != null){
+            if (beer.getBeerStyle() != null) {
                 foundBeer.setBeerStyle(beer.getBeerStyle());
             }
-            if (StringUtils.hasText(beer.getUpc())){
+            if (StringUtils.hasText(beer.getUpc())) {
                 foundBeer.setUpc(beer.getUpc());
             }
-            if (beer.getPrice() != null){
+            if (beer.getPrice() != null) {
                 foundBeer.setPrice(beer.getPrice());
             }
-            if (beer.getQuantityOnHand() != null){
+            if (beer.getQuantityOnHand() != null) {
                 foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
             }
             atomicReference.set(Optional.of(beerMapper
