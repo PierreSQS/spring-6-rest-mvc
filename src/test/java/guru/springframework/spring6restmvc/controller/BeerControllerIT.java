@@ -95,7 +95,7 @@ class BeerControllerIT {
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(25)));
+                .andExpect(jsonPath("$.content.length()", is(25)));
     }
 
     @Test
@@ -111,7 +111,7 @@ class BeerControllerIT {
         mockMvc.perform(get(BeerController.BEER_PATH)
                 .queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(25)));
+                .andExpect(jsonPath("$.content.length()", is(25)));
     }
 
     @Test
