@@ -1,6 +1,6 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring6restmvc.services.BeerService;
+import guru.springframework.spring7restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 
