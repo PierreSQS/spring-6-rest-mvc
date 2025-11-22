@@ -1,7 +1,7 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring6restmvc.model.Customer;
-import guru.springframework.spring6restmvc.services.CustomerService;
+import guru.springframework.spring7restmvc.model.Customer;
+import guru.springframework.spring7restmvc.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
