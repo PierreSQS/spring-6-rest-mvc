@@ -1,7 +1,7 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring6restmvc.model.Beer;
-import guru.springframework.spring6restmvc.services.BeerService;
+import guru.springframework.spring7restmvc.services.BeerService;
+import guru.springframework.spring7restmvc.model.Beer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
