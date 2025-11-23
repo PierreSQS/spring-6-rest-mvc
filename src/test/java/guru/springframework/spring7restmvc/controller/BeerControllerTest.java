@@ -1,8 +1,9 @@
 package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring7restmvc.services.BeerService;
 import guru.springframework.spring7restmvc.model.Beer;
+import guru.springframework.spring7restmvc.services.BeerService;
 import guru.springframework.spring7restmvc.services.BeerServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
