@@ -1,27 +1,23 @@
-package guru.springframework.spring6restmvc.model;
+package guru.springframework.spring7restmvc.model;
 
 import lombok.Builder;
 import lombok.Data;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
  * Created by jt, Spring Framework Guru.
  */
-@JsonDeserialize(builder = Beer.BeerBuilder.class)
-@Builder
+@JsonDeserialize(builder = Customer.CustomerBuilder.class)
 @Data
-public class Beer {
+@Builder
+public class Customer {
+
+    private String name;
     private UUID id;
     private Integer version;
-    private String beerName;
-    private BeerStyle beerStyle;
-    private String upc;
-    private Integer quantityOnHand;
-    private BigDecimal price;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 }
