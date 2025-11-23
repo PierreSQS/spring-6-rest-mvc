@@ -1,4 +1,4 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
 /**
  * Created by jt, Spring Framework Guru.
