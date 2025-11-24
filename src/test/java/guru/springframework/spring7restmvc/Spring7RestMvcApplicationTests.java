@@ -1,10 +1,10 @@
-package guru.springframework.spring6restmvc;
+package guru.springframework.spring7restmvc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Spring6RestMvcApplicationTests {
+class Spring7RestMvcApplicationTests {
 
     @Test
     void contextLoads() {
