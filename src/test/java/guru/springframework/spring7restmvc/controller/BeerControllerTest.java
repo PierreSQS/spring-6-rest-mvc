@@ -1,8 +1,8 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring6restmvc.model.BeerDTO;
-import guru.springframework.spring6restmvc.services.BeerService;
-import guru.springframework.spring6restmvc.services.BeerServiceImpl;
+import guru.springframework.spring7restmvc.model.BeerDTO;
+import guru.springframework.spring7restmvc.services.BeerService;
+import guru.springframework.spring7restmvc.services.BeerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

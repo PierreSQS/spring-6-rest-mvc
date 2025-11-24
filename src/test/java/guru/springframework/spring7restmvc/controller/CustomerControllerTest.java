@@ -1,8 +1,8 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring7restmvc.controller;
 
-import guru.springframework.spring6restmvc.model.CustomerDTO;
-import guru.springframework.spring6restmvc.services.CustomerService;
-import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
+import guru.springframework.spring7restmvc.model.CustomerDTO;
+import guru.springframework.spring7restmvc.services.CustomerService;
+import guru.springframework.spring7restmvc.services.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
