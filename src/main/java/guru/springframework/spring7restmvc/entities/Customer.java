@@ -1,4 +1,4 @@
-package guru.springframework.spring6restmvc.entities;
+package guru.springframework.spring7restmvc.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
