@@ -1,5 +1,6 @@
-package guru.springframework.spring7restmvc.model;
+package guru.springframework.spring7restmvc.entities;
 
+import guru.springframework.spring7restmvc.model.BeerStyle;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
