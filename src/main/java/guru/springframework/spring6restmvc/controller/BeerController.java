@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 2025-12-10.
  */
 @Slf4j
 @RequiredArgsConstructor
