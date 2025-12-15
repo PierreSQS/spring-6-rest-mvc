@@ -2,7 +2,9 @@ package guru.springframework.spring7restmvc.entities;
 
 import guru.springframework.spring7restmvc.model.BeerStyle;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +25,14 @@ import java.util.UUID;
 @Builder
 @Entity
 public class Beer {
+
     @Id
+    // See Hibernate 7.1.2 Documentation.
+    // Compare with Beer Entity
+    @GeneratedValue
     private UUID id;
+
+    @Version
     private Integer version;
     private String beerName;
     private BeerStyle beerStyle;
