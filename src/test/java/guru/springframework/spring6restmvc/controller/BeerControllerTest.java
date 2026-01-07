@@ -68,9 +68,6 @@ class BeerControllerTest {
         beerServiceImpl = new BeerServiceImpl();
     }
 
-    public static final String USERNAME = "user1";
-    public static final String PASSWORD = "password";
-
     @Test
     void testPatchBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.listBeers(null, null, false, 1, 25).getContent().getFirst();
