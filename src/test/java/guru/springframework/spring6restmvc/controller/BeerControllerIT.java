@@ -7,11 +7,11 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -20,9 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.HashMap;
@@ -38,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class BeerControllerIT {
     @Autowired
     BeerController beerController;
@@ -52,15 +51,7 @@ class BeerControllerIT {
     JsonMapper jsonMapper;
 
     @Autowired
-    WebApplicationContext wac;
-
     MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .build();
-    }
 
     @Disabled("just for demo purposes")
     @Test
@@ -147,7 +138,6 @@ class BeerControllerIT {
     void testNoAuth() throws Exception {
         //Test No Auth
         mockMvc.perform(get(BeerController.BEER_PATH)
-                        .with(JWT_REQ_POST_PROCESSOR)
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("pageSize", "800"))
                 .andExpect(status().isUnauthorized());
