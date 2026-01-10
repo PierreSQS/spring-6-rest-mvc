@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import(BeerCsvServiceImpl.class)
+@Import({BeerCsvServiceImpl.class, BootstrapData.class})
 class BootstrapDataTest {
 
     @Autowired
