@@ -10,6 +10,7 @@ import guru.springframework.spring6restmvc.services.BeerCsvService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
@@ -39,7 +40,7 @@ public class BootstrapData implements CommandLineRunner {
 
     @Transactional
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String @NonNull ... args) throws Exception {
         loadBeerData();
         loadCsvData();
         loadCustomerData();
