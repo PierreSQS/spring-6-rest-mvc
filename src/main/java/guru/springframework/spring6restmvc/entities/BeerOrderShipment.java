@@ -17,6 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -43,15 +44,22 @@ public class BeerOrderShipment {
 
     private String trackingNumber;
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof BeerOrderShipment that)) return false;
+
+        return Objects.equals(id, that.id) && Objects.equals(version, that.version) && Objects.equals(beerOrder, that.beerOrder) && Objects.equals(trackingNumber, that.trackingNumber) && Objects.equals(createdDate, that.createdDate) && Objects.equals(lastModifiedDate, that.lastModifiedDate);
+    }
 }
