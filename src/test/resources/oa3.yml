@@ -368,6 +368,7 @@ components:
           $ref: '#/components/schemas/PageableObject'
         empty:
           type: boolean
+      additionalProperties: true
     PageableObject:
       type: object
       properties:
