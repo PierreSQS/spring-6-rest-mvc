@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.config.SpringSecConfig;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.services.BeerService;
@@ -17,6 +16,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ class BeerControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    JsonMapper jsonMapper;
 
     @MockitoBean
     BeerService beerService;
@@ -78,7 +78,7 @@ class BeerControllerTest {
                         .with(jwtRequestPostProcessor)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerMap)))
+                        .content(jsonMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isNoContent());
 
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
@@ -113,7 +113,7 @@ class BeerControllerTest {
                         .with(jwtRequestPostProcessor)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)))
+                .content(jsonMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent());
 
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
@@ -129,7 +129,7 @@ class BeerControllerTest {
                         .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beer)))
+                        .content(jsonMapper.writeValueAsString(beer)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()", is(1)));
 
@@ -147,7 +147,7 @@ class BeerControllerTest {
                         .with(jwtRequestPostProcessor)
                 .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beer)))
+                        .content(jsonMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
@@ -163,7 +163,7 @@ class BeerControllerTest {
                         .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerDTO)))
+                        .content(jsonMapper.writeValueAsString(beerDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()", is(6)))
                 .andReturn();

@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +51,7 @@ class BeerControllerIT {
     BeerMapper beerMapper;
 
     @Autowired
-    ObjectMapper objectMapper;
+    JsonMapper jsonMapper;
 
     @Autowired
     WebApplicationContext wac;
@@ -77,7 +77,7 @@ class BeerControllerIT {
         MvcResult result = mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerDTO)))
+                        .content(jsonMapper.writeValueAsString(beerDTO)))
                 .andExpect(status().isNoContent())
                 .andReturn();
 
@@ -88,7 +88,7 @@ class BeerControllerIT {
         MvcResult result2 = mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerDTO)))
+                        .content(jsonMapper.writeValueAsString(beerDTO)))
                 .andExpect(status().isNoContent())
                 .andDo(print())
                 .andReturn();
@@ -188,7 +188,7 @@ class BeerControllerIT {
                         .with(BeerControllerTest.jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(beerMap)))
+                        .content(jsonMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isBadRequest())
                 .andDo(print()) // More concise as an unnecessary sout!!
                 .andReturn();
