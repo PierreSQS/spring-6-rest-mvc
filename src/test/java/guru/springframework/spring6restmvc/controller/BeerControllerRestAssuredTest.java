@@ -27,7 +27,7 @@ import static io.restassured.RestAssured.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(BeerControllerRestAssuredTest.TestConfig.class)
 @ComponentScan(basePackages = "guru.springframework.spring6restmvc")
-public class BeerControllerRestAssuredTest {
+class BeerControllerRestAssuredTest {
 
     OpenApiValidationFilter filter = new OpenApiValidationFilter(OpenApiInteractionValidator
             .createForSpecificationUrl("oa3.yml")
@@ -39,10 +39,9 @@ public class BeerControllerRestAssuredTest {
     @Configuration
     public static class TestConfig {
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-            http.authorizeHttpRequests(authorize -> {
-                authorize.anyRequest().permitAll();
-            });
+        public SecurityFilterChain filterChain(HttpSecurity http){
+            http.authorizeHttpRequests(authorize ->
+                    authorize.anyRequest().permitAll());
 
             return http.build();
         }

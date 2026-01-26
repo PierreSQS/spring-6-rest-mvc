@@ -33,6 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BeerController.class)
@@ -63,10 +64,8 @@ class BeerControllerTest {
     }
 
     public static final SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor jwtRequestPostProcessor =
-            jwt().jwt(jwt -> jwt.claims(claims -> {
-                        claims.put("scope", "message-read");
-                        claims.put("scope", "message-write");
-                    })
+            jwt().jwt(jwt -> jwt.claims(claims ->
+                            claims.put("scope", "message-read message-write"))
                     .subject("messaging-client")
                     .notBefore(Instant.now().minusSeconds(5L)));
 
@@ -82,7 +81,8 @@ class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                         .content(jsonMapper.writeValueAsString(beerMap)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
 
