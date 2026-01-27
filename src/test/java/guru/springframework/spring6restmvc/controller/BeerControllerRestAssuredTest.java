@@ -8,10 +8,9 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,7 +25,6 @@ import static io.restassured.RestAssured.given;
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(BeerControllerRestAssuredTest.TestConfig.class)
-@ComponentScan(basePackages = "guru.springframework.spring6restmvc")
 class BeerControllerRestAssuredTest {
 
     OpenApiValidationFilter filter = new OpenApiValidationFilter(OpenApiInteractionValidator
@@ -36,7 +34,7 @@ class BeerControllerRestAssuredTest {
                     messageHasKey("validation.response.body.schema.format.date-time")))
             .build());
 
-    @Configuration
+    @TestConfiguration
     public static class TestConfig {
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http){
