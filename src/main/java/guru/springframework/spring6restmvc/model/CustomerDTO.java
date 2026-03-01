@@ -1,14 +1,18 @@
 package guru.springframework.spring6restmvc.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 2026-03-01.
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class CustomerDTO {
