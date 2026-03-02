@@ -2,16 +2,20 @@ package guru.springframework.spring7restmvc.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 2026-03-02.
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 public class BeerDTO {
