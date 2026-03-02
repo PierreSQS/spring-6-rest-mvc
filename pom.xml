@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from the repository -->
     </parent>
     <groupId>guru.springframework</groupId>
-    <artifactId>spring-6-rest-mvc</artifactId>
+    <artifactId>spring-7-rest-mvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-6-rest-mvc</name>
-    <description>spring-6-rest-mvc</description>
+    <name>spring-7-rest-mvc</name>
+    <description>spring-7-rest-mvc</description>
     <properties>
         <java.version>21</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
